@@ -1,11 +1,63 @@
 [
   {
-    "name": "",
-    "address": "",
-    "doc": 0,
-    "corriente": "",
-    "id": 0,
-    "logins": [],
+    "name": "Juan Pérez",
+    "address": "Calle Falsa 123, Buenos Aires, Ciudad Autónoma de Buenos Aires",
+    "doc": "35247895",
+    "corriente": "abc12",
+    "id": "f1e2d",
+    "logins": ["2023-06-24 09:15", "2023-06-23 18:30", "2023-06-22 14:45"],
+    "cat": ""
+  },
+  {
+    "name": "María González",
+    "address": "Avenida Principal 456, Córdoba, Córdoba",
+    "doc": "23981456",
+    "corriente": "xyz34",
+    "id": "a4b6c",
+    "logins": [
+      "2023-06-24 12:30",
+      "2023-06-23 09:45",
+      "2023-06-22 17:20",
+      "2023-06-21 21:10"
+    ],
+    "cat": ""
+  },
+  {
+    "name": "Carlos Rodríguez",
+    "address": "Calle Mayor 789, Rosario, Santa Fe",
+    "doc": "45872136",
+    "corriente": "pqr56",
+    "id": "e8f1g",
+    "logins": [
+      "2023-06-24 07:55",
+      "2023-06-23 15:40",
+      "2023-06-22 10:05",
+      "2023-06-21 19:30",
+      "2023-06-20 08:15"
+    ],
+    "cat": ""
+  },
+  {
+    "name": "Laura Fernández",
+    "address": "Calle Principal 987, Mendoza, Mendoza",
+    "doc": "60123456",
+    "corriente": "def78",
+    "id": "h2i3j",
+    "logins": [
+      "2023-06-24 16:50",
+      "2023-06-23 11:25",
+      "2023-06-22 08:40",
+      "2023-06-21 13:55"
+    ],
+    "cat": ""
+  },
+  {
+    "name": "Pedro Sánchez",
+    "address": "Avenida Mayor 654, Salta, Salta",
+    "doc": "78901234",
+    "corriente": "ghi90",
+    "id": "k4l5m",
+    "logins": ["2023-06-24 20:20", "2023-06-23 17:15", "2023-06-22 14:05"],
     "cat": ""
   }
 ]

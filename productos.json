@@ -1,10 +1,82 @@
 [
   {
-    "name": "",
-    "code": "",
-    "desc": "",
-    "fotos": [""],
-    "price": 0,
-    "stock": 0
+    "name": "Camisa de algodón",
+    "code": "2345",
+    "desc": 30,
+    "fotos": "",
+    "price": 29.99,
+    "stock": 98
+  },
+  {
+    "name": "Zapatos deportivos",
+    "code": "1876",
+    "desc": 15,
+    "fotos": "",
+    "price": 79.99,
+    "stock": 112
+  },
+  {
+    "name": "Bolso de cuero",
+    "code": "5912",
+    "desc": 20,
+    "fotos": "",
+    "price": 149.99,
+    "stock": 72
+  },
+  {
+    "name": "Pantalones vaqueros",
+    "code": "8320",
+    "desc": 5,
+    "fotos": "",
+    "price": 49.99,
+    "stock": 124
+  },
+  {
+    "name": "Reloj de pulsera",
+    "code": "4123",
+    "desc": 40,
+    "fotos": "",
+    "price": 99.99,
+    "stock": 89
+  },
+  {
+    "name": "Suéter de lana",
+    "code": "5678",
+    "desc": 10,
+    "fotos": "",
+    "price": 59.99,
+    "stock": 60
+  },
+  {
+    "name": "Gafas de sol",
+    "code": "9012",
+    "desc": 25,
+    "fotos": "",
+    "price": 39.99,
+    "stock": 77
+  },
+  {
+    "name": "Vestido elegante",
+    "code": "3456",
+    "desc": 50,
+    "fotos": "",
+    "price": 129.99,
+    "stock": 51
+  },
+  {
+    "name": "Bolígrafo de lujo",
+    "code": "7890",
+    "desc": 5,
+    "fotos": "",
+    "price": 19.99,
+    "stock": 95
+  },
+  {
+    "name": "Zapatos de tacón",
+    "code": "4321",
+    "desc": 15,
+    "fotos": "",
+    "price": 89.99,
+    "stock": 135
   }
 ]
