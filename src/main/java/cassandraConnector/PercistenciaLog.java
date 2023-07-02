@@ -5,7 +5,7 @@ import com.datastax.driver.core.Row;
 
 import java.util.Optional;
 
-import static com.ibm.dtfj.javacore.parser.j9.section.classloader.ClassLoaderPatternMatchers.system;
+//import static com.ibm.dtfj.javacore.parser.j9.section.classloader.ClassLoaderPatternMatchers.system;
 import static java.lang.System.out;
 
 public class PercistenciaLog {

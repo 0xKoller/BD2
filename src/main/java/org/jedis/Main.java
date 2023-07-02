@@ -39,5 +39,13 @@ public class Main {
         int cantidadNueva = scanner.nextInt();
         connectionJedis.updateCartItemQuantity(cartIdUpdate,itemIdUpdate,cantidadNueva);
 
+        System.out.print("Ingrese 1 si desea volver un paso atras: ");
+        int variable = scanner.nextInt();
+        if (variable == 1){
+            System.out.print("Ingrese el ID del carrito para volver un paso atras: ");
+            String cartIdUndo = scanner.nextLine();
+            connectionJedis.undo(cartIdUndo);
+            connectionJedis.printCartItems(cartIdUndo);
+        }
     }
 }

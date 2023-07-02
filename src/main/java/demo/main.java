@@ -19,11 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import java.util.Scanner;
-
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Host;
-import com.datastax.driver.core.Metadata;
-import com.datastax.driver.core.Session;
+// import com.datastax.driver.core.Cluster;
+// import com.datastax.driver.core.Host;
+// import com.datastax.driver.core.Metadata;
+// import com.datastax.driver.core.Session;
 
 import static java.lang.System.out;
 
@@ -31,23 +30,31 @@ public class main {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-        String connectionString = "mongodb://localhost:27017";
-        MongoClient mongoClient = MongoClients.create(connectionString);
+//      String connectionString = "mongodb://localhost:27017";
+//        MongoClient mongoClient = MongoClients.create(connectionString);
 
 //        Establezco conexion con Mongo
-        MongoDatabase database = mongoClient.getDatabase("tpo");
+//        MongoDatabase database = mongoClient.getDatabase("tpo");
 
 //        Obtener colleccion de mongo
-                MongoCollection<Document> collection = database.getCollection("usuarios");
+//                MongoCollection<Document> collection = database.getCollection("usuarios");
 //        FindIterable<Document> documents = collection.find();
 //        MongoCursor<Document> cursor = documents.iterator();
 //        while (cursor.hasNext()) {
 //            Document document = cursor.next();
 //            System.out.println(document.toJson());
 //        }
+        System.out.println("TPO BD II");
+        System.out.println("-----------------");
+        System.out.println("MENU");
+        System.out.println("-----------------");
+        System.out.println("1.- Usuario");
+        System.out.println("2.- Admin");
+        System.out.print("Ingrese una opcion: ");
         Scanner scanner = new Scanner(System.in);
-        int opt = -1;
-        while (opt != 1 || opt != 2){
+        int opt = scanner.nextInt();
+
+        while (opt != 1 && opt != 2){
 
             System.out.println("TPO BD II");
             System.out.println("-----------------");
@@ -70,7 +77,71 @@ public class main {
                  System.out.println("4.- Eliminar producto del carrito");
                  System.out.println("5.- Eliminar al carrito");
                  System.out.println("6.- Facturar carrito");
+                 System.out.println("7.- Volver un paso atras en un carrito");
                  System.out.println("0.- SALIR");
+                 System.out.print("Ingrese una opcion: ");
+                 int opt2 = scanner.nextInt();
+                 while (opt2!= 0){
+                     if (opt2 == 1){
+                         System.out.print("Ingrese el ID del carrito para ver: ");
+                         String cartIdBuscar = scanner.next();
+
+                         // Obtener la cantidad de elementos en el carrito
+                         connectionJedis.printCartItems(cartIdBuscar);
+                         opt2 = 0;
+                     } else if (opt2 == 2) {
+                         System.out.print("Ingrese el ID del carrito: ");
+                         String cartId = scanner.next();
+
+                         System.out.print("Ingrese el ID del cliente: ");
+                         String clienteId = scanner.next();
+
+                         System.out.print("Ingrese el ID del artículo: ");
+                         String itemId = scanner.next();
+
+                         System.out.print("Ingrese la cantidad: ");
+                         int cantidad = scanner.nextInt();
+
+                         scanner.nextLine();
+
+
+                         // Agregar elementos al carrito
+                         connectionJedis.addItemToCart(cartId,clienteId, itemId, cantidad);
+                         opt2 = 0;
+
+                     } else if(opt2 == 3){
+                         // Actualizar el carrito
+                         System.out.print("Ingrese el ID del carrito para actualizar: ");
+                         String cartIdUpdate = scanner.next();
+                         System.out.print("Ingrese el ID del item para actualizar: ");
+                         String itemIdUpdate = scanner.next();
+                         System.out.print("Ingrese la nueva cantidad: ");
+                         int cantidadNueva = scanner.nextInt();
+                         connectionJedis.updateCartItemQuantity(cartIdUpdate,itemIdUpdate,cantidadNueva);
+                         opt2 = 0;
+                     } else if (opt2 == 4){
+                         System.out.print("Ingrese el ID del carrito para eliminar un producto: ");
+                         String cartIdDel = scanner.next();
+                         System.out.print("Ingrese el ID del item para eliminar: ");
+                         String itemIdDel = scanner.next();
+                         connectionJedis.removeItemCart(cartIdDel,itemIdDel);
+                         opt2 = 0;
+                     } else if (opt2 == 5){
+                         System.out.print("Ingrese el ID del carrito a eliminar : ");
+                         String cartIdDelete = scanner.next();
+                         connectionJedis.deleteCart(cartIdDelete);
+                         opt2 = 0;
+                     } else if (opt2 == 7){
+                         System.out.print("Ingrese el ID del carrito para volver un paso atras: ");
+                         String cartIdUndo = scanner.next();
+                         connectionJedis.undo(cartIdUndo);
+                         connectionJedis.printCartItems(cartIdUndo);
+
+
+                         opt2 = 0;
+
+                     }
+                 }
              }
          }else{
              while (opt != 0){
