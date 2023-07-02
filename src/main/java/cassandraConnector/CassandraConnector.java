@@ -59,6 +59,8 @@ public class CassandraConnector {
      * @param args Command-line arguments; first argument, if provided, is the
      *    host and second argument, if provided, is the port.
      */
+
+
     public static void main(final String[] args)
     {
         final CassandraConnector client = new CassandraConnector();
@@ -68,4 +70,4 @@ public class CassandraConnector {
         client.connect(ipAddress, port);
         client.close();
     }
-} 
+}
