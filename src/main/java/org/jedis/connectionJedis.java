@@ -6,23 +6,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class connectionJedis {
-    public static void main(String[] args) {
-        @SuppressWarnings("resource") JedisPool pool = new JedisPool("localhost", 6379);
+    private static JedisPool pool = new JedisPool("localhost", 6379);
 
+    public static void addItemToCart(String cartId,String clienteId, String itemId, int quantity) {
         try (Jedis jedis = pool.getResource()) {
-            // Store & Retrieve a simple string
-            jedis.set("foo", "bar");
-            System.out.println(jedis.get("foo")); // prints bar
+            jedis.hset(cartId.getBytes(), itemId.getBytes(), String.valueOf(quantity).getBytes());
+            jedis.hset(cartId.getBytes(), "clienteId".getBytes(), clienteId.getBytes());
+        }
+    }
 
-            // Store & Retrieve a HashMap
-            Map<String, String> hash = new HashMap<>();
-            hash.put("name", "John");
-            hash.put("surname", "Smith");
-            hash.put("company", "Redis");
-            hash.put("age", "29");
-            jedis.hset("user-session:123", hash);
-            System.out.println(jedis.hgetAll("user-session:123"));
-            // Prints: {name=John, surname=Smith, company=Redis, age=29}
+    public static void printCartItems(String cartId) {
+        try (Jedis jedis = pool.getResource()) {
+            Map<byte[], byte[]> cartItems = jedis.hgetAll(cartId.getBytes());
+            for (Map.Entry<byte[], byte[]> entry : cartItems.entrySet()) {
+                String itemId = new String(entry.getKey());
+                if (!"clienteId".equals(itemId)) {
+                    int cantidad = Integer.parseInt(new String(entry.getValue()));
+                    System.out.println("Item: " + itemId + ", Cantidad: " + cantidad);
+                }
+            }
+        }
+    }
+    public static void updateCartItemQuantity(String cartId, String itemId, int newQuantity) {
+        try (Jedis jedis = pool.getResource()) {
+            jedis.hset(cartId.getBytes(), itemId.getBytes(), String.valueOf(newQuantity).getBytes());
         }
     }
 }
