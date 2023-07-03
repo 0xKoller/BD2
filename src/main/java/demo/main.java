@@ -81,7 +81,7 @@ public class main {
                  System.out.println("0.- SALIR");
                  System.out.print("Ingrese una opcion: ");
                  int opt2 = scanner.nextInt();
-                 while (opt2!= 0){
+                 while (opt2 != -1) {
                      if (opt2 == 1){
                          System.out.print("Ingrese el ID del carrito para ver: ");
                          String cartIdBuscar = scanner.next();
@@ -136,10 +136,10 @@ public class main {
                          String cartIdUndo = scanner.next();
                          connectionJedis.undo(cartIdUndo);
                          connectionJedis.printCartItems(cartIdUndo);
-
-
                          opt2 = 0;
 
+                     } else if (opt2 == 0){
+                         opt = 0;
                      }
                  }
              }
