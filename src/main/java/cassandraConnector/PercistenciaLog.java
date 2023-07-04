@@ -47,11 +47,33 @@ public class PercistenciaLog {
 
 
             // Mostrar los valores en la consola
-            System.out.println("idProducto: " + columna1 + "   campo modificado: " + columna2 + "   antes: " + columna3 +
-                    "   despues: " + columna4 + "   idAdmin: " + columna5);
+            System.out.println("idProducto: " + columna1 + " -- campo modificado: " + columna2 + " -- antes: " + columna3 +
+                    " -- despues: " + columna4 + " -- idAdmin: " + columna5);
         }
     }
 
+    public void selectProdEspecifico(int prod){
+        String keyspace = "tpo;";
+        session.execute("USE " + keyspace);
+        String query = "SELECT * FROM log_catalogo WHERE id_producto = " + prod + ";";
+        ResultSet resultSet = session.execute(query);
+
+
+        // Recorrer los resultados y mostrarlos en la consola
+        for (Row row : resultSet) {
+            // Obtener los valores de cada columna
+            int columna1 = row.getInt("id_producto");
+            String columna2 = row.getString("campo_modificado");
+            String columna3 = row.getString("antes");
+            String columna4 = row.getString("despues");
+            int columna5 = row.getInt("id_admin");
+
+
+            // Mostrar los valores en la consola
+            System.out.println("idProducto: " + columna1 + " -- campo modificado: " + columna2 + " -- antes: " + columna3 +
+                    " -- despues: " + columna4 + " -- idAdmin: " + columna5);
+        }
+    }
     public void close() {
         session.close();
         cluster.close();
@@ -60,13 +82,20 @@ public class PercistenciaLog {
     public static void main(String[] args) {
         String ipAddress = "127.0.0.1";
         int port = 9042;
+        int prod = 10;
 
         /*PercistenciaLog insert = new PercistenciaLog(ipAddress, port);
         insert.insertLog(44, "Precio", "100", "90", 1146056);
         insert.close();*/
 
-        PercistenciaLog select = new PercistenciaLog(ipAddress,port);
-        select.selectAllLog();
-        select.close();
+        PercistenciaLog selectAll = new PercistenciaLog(ipAddress,port);
+        selectAll.selectAllLog();
+        selectAll.close();
+
+        System.out.println("--------------------------------------------------------------------------------------------------------------");
+
+        PercistenciaLog selectProd = new PercistenciaLog(ipAddress,port);
+        selectProd.selectProdEspecifico(prod);
+        selectProd.close();
     }
 }
