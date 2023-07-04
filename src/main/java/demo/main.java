@@ -6,6 +6,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.quickstart.Connection;
 import org.bson.Document;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -95,6 +96,7 @@ public class main {
                  System.out.println("4.- Eliminar producto del carrito");
                  System.out.println("5.- Eliminar el carrito");
                  System.out.println("6.- Facturar carrito");
+                 System.out.println("7.- Ver prodcutos");
                  System.out.println("0.- SALIR");
                  System.out.print("Ingrese una opcion: ");
                  opt = scanner.nextInt();
@@ -135,6 +137,10 @@ public class main {
                      case 6:
 
                          System.out.println("6.- Facturar carrito");
+                         break;
+                     case 7:
+
+                         Connection.verProductos();
                          break;
                      default:
                          System.out.println("Opción inválida");

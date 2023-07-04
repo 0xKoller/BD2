@@ -14,11 +14,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
-import java.util.Optional;
-import java.util.Scanner;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Connection {
     private static final String CONNECTION_STRING = "mongodb://localhost:27017";
@@ -60,6 +56,7 @@ public class Connection {
     }
 
     public static void verProductos() {
+        Map<String, List<String>> productos = new HashMap<>();
         try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
             MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
             MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME);
@@ -68,7 +65,14 @@ public class Connection {
             MongoCursor<Document> cursor = documents.iterator();
             while (cursor.hasNext()) {
                 Document document = cursor.next();
-                System.out.println(document.toJson());
+                String nombre = document.getString("name");
+                String price = document.getString("price");
+                String code = document.getString("code");
+                List<String> info = new ArrayList<>();
+                info.add(nombre);
+                info.add(price);
+                System.out.println("Nombre: "+nombre+" Precio: "+price+" Codigo: "+code);
+
             }
         }
     }
