@@ -3,13 +3,11 @@ package org.jedis;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class connectionJedis {
     private static JedisPool pool = new JedisPool("localhost", 6379);
-    private static Map<String, Stack<Map<byte[], byte[]>>> cartUndoMap = new HashMap<>();
+    private static Map<String, Stack<Map<byte[],byte[]>>> cartUndoMap = new HashMap<>();
 
     public static void addItemToCart(String cartId, String clienteId, String itemId, int quantity) {
         try (Jedis jedis = pool.getResource()) {
@@ -72,5 +70,11 @@ public class connectionJedis {
             jedis.del(cartId.getBytes());
         }
     }
+
+
+
+
+
+
 
 }

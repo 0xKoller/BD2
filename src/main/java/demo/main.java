@@ -49,6 +49,7 @@ public class main {
         }
         if (opt == 1) {
             List<String> username = Connection.seleccionUsuario();
+            String idUser = username.get(0);
             System.out.println("======================");
             System.out.println("Bienvenido "+ username.get(1));
              while (opt != 0){
@@ -64,36 +65,53 @@ public class main {
                  opt = scanner.nextInt();
                  switch (opt) {
                      case 1:
-//                         El usuario seleccione el carrito para ver los elementos
-                         System.out.print("Ingrese el ID del carrito para ver sus elementos: ");
+//                       El usuario seleccione el carrito para ver los elementos
+                         System.out.print("Ingrese el ID del carrito que desea ver: ");
                          String cartIdBuscar = scanner.nextLine();
+
                          connectionJedis.printCartItems(cartIdBuscar);
                          break;
                      case 2:
                         System.out.print("Ingrese el ID del carrito: ");
                         String cartId = scanner.nextLine();
-                        System.out.print("Ingrese el ID del cliente: ");
-                        String clienteId = scanner.nextLine();
+
+                        scanner.nextLine();
+
                         System.out.print("Ingrese el ID del artículo: ");
                         String itemId = scanner.nextLine();
+
                         System.out.print("Ingrese la cantidad: ");
                         int cantidad = scanner.nextInt();
-                        connectionJedis.addItemToCart(cartId,clienteId, itemId, cantidad);
+                        connectionJedis.addItemToCart(cartId,idUser, itemId, cantidad);
                         break;
                      case 3:
                         System.out.print("Ingrese el ID del carrito para actualizar: ");
                         String cartIdUpdate = scanner.nextLine();
+
                         System.out.print("Ingrese el ID del item para actualizar: ");
                         String itemIdUpdate = scanner.nextLine();
+
                         System.out.print("Ingrese la nueva cantidad: ");
                         int cantidadNueva = scanner.nextInt();
                         connectionJedis.updateCartItemQuantity(cartIdUpdate,itemIdUpdate,cantidadNueva);
                         break;
                      case 4:
-                         System.out.println("4.- Eliminar producto del carrito");
+                         System.out.print("Ingrese el ID del carrito para Eliminar un item: ");
+                         String cartIdDel = scanner.nextLine();
+
+                         System.out.print("Ingrese el ID del carrito para Eliminar: ");
+                         String itemIdDel = scanner.nextLine();
+
+                         connectionJedis.removeItemCart(cartIdDel,itemIdDel);
+                         System.out.print("El item fue borrado con exito ");
+                         connectionJedis.printCartItems(cartIdDel);
                          break;
                      case 5:
-                         System.out.println("5.- Eliminar el carrito");
+                         System.out.print("Ingrese el ID del carrito para Eliminar un item: ");
+                         String cartIdDelete = scanner.nextLine();
+
+                         connectionJedis.deleteCart(cartIdDelete);
+                         System.out.print("Carrito borrado con exito ");
                          break;
                      case 6:
                          System.out.println("6.- Facturar carrito");
@@ -120,9 +138,6 @@ public class main {
                          break;
                      case 3:
                          Connection.crearUsuario();
-                         break;
-                     case 4:
-                         System.out.println("4.- Eliminar producto del carrito");
                          break;
                      case 0:
                          break;
