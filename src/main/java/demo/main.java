@@ -35,18 +35,9 @@ public class main {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-        String connectionString = "mongodb://localhost:27017";
-        MongoClient mongoClient = MongoClients.create(connectionString);
-
-//      Establezco conexion con Mongo
-        MongoDatabase database = mongoClient.getDatabase("tpo");
-
-//      Obtener colleccion de mongo
-        MongoCollection<Document> collection = database.getCollection("usuarios");
         Scanner scanner = new Scanner(System.in);
         int opt = -1;
         while (opt != 1 && opt != 2){
-
             System.out.println("TPO BD II");
             System.out.println("-----------------");
             System.out.println("MENU");
@@ -57,38 +48,9 @@ public class main {
             opt = scanner.nextInt();
         }
         if (opt == 1) {
-            int user = -1;
-            // Obtener todos los documentos de la colección
-            MongoCursor<Document> cursor = collection.find().iterator();
-
-            // Array para almacenar los IDs de los usuarios
-            Map<String, String> usuarios = new HashMap<>();
-            // Iterar sobre los documentos
-            while (cursor.hasNext()) {
-                Document document = cursor.next();
-                String id = document.getString("id");
-                String nombre = document.getString("name");
-
-                // Imprimir el nombre y el ID
-                System.out.println("Nombre: " + nombre + " | ID: " + id);
-
-                // Agregar el ID al array
-                usuarios.put(id,nombre);
-            }
-            String userInput;
-            // Bucle para validar la entrada del usuario
-            while (true) {
-                System.out.print("Ingrese un ID válido: ");
-                userInput = scanner.nextLine();
-                if (usuarios.containsKey(userInput)) {
-                    break; // Salir del bucle si la entrada es válida
-                } else {
-                    System.out.println("ID inválido. Inténtelo nuevamente.");
-                }
-            }
-            String username = usuarios.get(userInput);
+            List<String> username = Connection.seleccionUsuario();
             System.out.println("======================");
-            System.out.println("Bienvenido "+ username);
+            System.out.println("Bienvenido "+ username.get(1));
              while (opt != 0){
                  System.out.println("1.- Ver carritos");
                  System.out.println("2.- Agregar al carrito");
@@ -131,16 +93,15 @@ public class main {
                          System.out.println("4.- Eliminar producto del carrito");
                          break;
                      case 5:
-
                          System.out.println("5.- Eliminar el carrito");
                          break;
                      case 6:
-
                          System.out.println("6.- Facturar carrito");
                          break;
                      case 7:
-
                          Connection.verProductos();
+                         break;
+                     case 0:
                          break;
                      default:
                          System.out.println("Opción inválida");
@@ -149,49 +110,10 @@ public class main {
              }
          }else{
              while (opt != 0){
-
-
                  System.out.println("0.- SALIR");
                  opt = scanner.nextInt();
              }
-
-//
-//
-//
-//        System.out.print("Ingrese el ID del carrito: ");
-//        String cartId = scanner.nextLine();
-//
-//        System.out.print("Ingrese el ID del cliente: ");
-//        String clienteId = scanner.nextLine();
-//
-//        System.out.print("Ingrese el ID del artículo: ");
-//        String itemId = scanner.nextLine();
-//
-//        System.out.print("Ingrese la cantidad: ");
-//        int cantidad = scanner.nextInt();
-//
-//        scanner.nextLine();
-//
-//
-//
-//
-//        // Obtener la cantidad de elementos en el carrito
-//
-
-
-
         }
         System.out.println("TPO realizado por: ");
     }
-
-    public static void crearUsuario(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Nombre");
-        String name = scanner.nextLine();
-        System.out.print("Direccion");
-        String address = scanner.nextLine();
-        System.out.print("Documento");
-        int doc = scanner.nextInt();
-    }
-
 }

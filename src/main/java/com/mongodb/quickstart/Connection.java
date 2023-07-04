@@ -66,12 +66,12 @@ public class Connection {
             while (cursor.hasNext()) {
                 Document document = cursor.next();
                 String nombre = document.getString("name");
-                String price = document.getString("price");
+                Double price = document.getDouble("price");
                 String code = document.getString("code");
                 List<String> info = new ArrayList<>();
                 info.add(nombre);
-                info.add(price);
-                System.out.println("Nombre: "+nombre+" Precio: "+price+" Codigo: "+code);
+                info.add(price.toString());
+                System.out.println("Nombre: "+nombre+" | Precio: "+price+" | Codigo: "+code);
 
             }
         }
@@ -144,4 +144,49 @@ public class Connection {
             }
         }
     }
+
+    public static List<String> seleccionUsuario(){
+        Map<String, String> usuarios = new HashMap<>();
+        List<String> user = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        String connectionString = "mongodb://localhost:27017";
+        MongoClient mongoClient = MongoClients.create(connectionString);
+        MongoDatabase database = mongoClient.getDatabase("tpo");
+        MongoCollection<Document> collection = database.getCollection("usuarios");
+        MongoCursor<Document> cursor = collection.find().iterator();
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
+            String id = document.getString("id");
+            String nombre = document.getString("name");
+            System.out.println("Nombre: " + nombre + " | ID: " + id);
+            usuarios.put(id,nombre);
+        }
+        cursor.close();
+        mongoClient.close();
+        String userInput;
+        // Bucle para validar la entrada del usuario
+        while (true) {
+            System.out.print("Ingrese un ID válido: ");
+            userInput = scanner.nextLine();
+            if (usuarios.containsKey(userInput)) {
+                break; // Salir del bucle si la entrada es válida
+            } else {
+                System.out.println("ID inválido. Inténtelo nuevamente.");
+            }
+        }
+        user.add(userInput);
+        user.add(usuarios.get(userInput));
+        return user;
+    }
+
+    public static void crearUsuario(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Nombre");
+        String name = scanner.nextLine();
+        System.out.print("Direccion");
+        String address = scanner.nextLine();
+        System.out.print("Documento");
+        int doc = scanner.nextInt();
+    }
 }
+
