@@ -19,7 +19,7 @@ import java.util.*;
 public class Connection {
     private static final String CONNECTION_STRING = "mongodb://localhost:27017";
     private static final String DATABASE_NAME = "tpo";
-    private static final String COLLECTION_NAME = "productos";
+
 
     public static void main(String[] args) {
         try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
@@ -38,7 +38,7 @@ public class Connection {
     public static void agregarProducto(String nombre,String code, String descripcion,String fotos, double precio, int stock) {
         try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
             MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
-            MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME);
+            MongoCollection<Document> collection = database.getCollection("productos");
 
             Document producto = new Document()
                     .append("nombre", nombre)
@@ -59,7 +59,7 @@ public class Connection {
         Map<String, List<String>> productos = new HashMap<>();
         try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
             MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
-            MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME);
+            MongoCollection<Document> collection = database.getCollection("productos");
 
             FindIterable<Document> documents = collection.find();
             MongoCursor<Document> cursor = documents.iterator();
@@ -79,7 +79,7 @@ public class Connection {
     public static void actualizarProducto() {
         try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
             MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
-            MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME);
+            MongoCollection<Document> collection = database.getCollection("productos");
 
             Scanner scanner = new Scanner(System.in);
 
@@ -149,9 +149,8 @@ public class Connection {
         Map<String, String> usuarios = new HashMap<>();
         List<String> user = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
-        String connectionString = "mongodb://localhost:27017";
-        MongoClient mongoClient = MongoClients.create(connectionString);
-        MongoDatabase database = mongoClient.getDatabase("tpo");
+        MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
         MongoCollection<Document> collection = database.getCollection("usuarios");
         MongoCursor<Document> cursor = collection.find().iterator();
         while (cursor.hasNext()) {
@@ -187,6 +186,53 @@ public class Connection {
         String address = scanner.nextLine();
         System.out.print("Documento");
         int doc = scanner.nextInt();
+        String id = generarId("usuarios");
+        String corriente = generarId("cc");
+        String cat = "";
+        ArrayList<String> logins = new ArrayList<>();
+        MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = database.getCollection("usuarios");
+        Document document = new Document()
+                .append("name", name)
+                .append("address", address)
+                .append("corriente", corriente)
+                .append("doc", doc)
+                .append("id",id)
+                .append("cat",cat)
+                .append("logins",logins);
+        collection.insertOne(document);
+        mongoClient.close();
+    }
+    private static String generarId(String table){
+        MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = database.getCollection(table);
+        MongoCursor<Document> cursor = collection.find().iterator();
+        List<String> ids = new ArrayList<>();
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
+            String id = document.getString("id");
+            ids.add(id);
+        }
+        cursor.close();
+        mongoClient.close();
+        Random random = new Random();
+        String caracteres = "abcdefghijklmnopqrstuvwxyz0123456789";
+        int longitud = 5;
+        String nuevoId = "";
+        boolean idRepetido = true;
+        while (idRepetido) {
+            StringBuilder sb = new StringBuilder(longitud);
+            for (int i = 0; i < longitud; i++) {
+                int indice = random.nextInt(caracteres.length());
+                char caracter = caracteres.charAt(indice);
+                sb.append(caracter);
+            }
+            nuevoId = sb.toString();
+            idRepetido = ids.contains(nuevoId);
+        }
+        return nuevoId;
     }
 }
 

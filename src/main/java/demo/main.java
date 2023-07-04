@@ -101,17 +101,32 @@ public class main {
                      case 7:
                          Connection.verProductos();
                          break;
-                     case 0:
-                         break;
-                     default:
-                         System.out.println("Opción inválida");
-                         break;
                  }
              }
          }else{
              while (opt != 0){
+                 System.out.println("1.- Ver prodcutos");
+                 System.out.println("2.- Modificar producto");
+                 System.out.println("3.- Crear usuario");
                  System.out.println("0.- SALIR");
+                 System.out.print("Ingrese una opcion: ");
                  opt = scanner.nextInt();
+                 switch (opt) {
+                     case 1:
+                         Connection.verProductos();
+                         break;
+                     case 2:
+                         Connection.actualizarProducto();
+                         break;
+                     case 3:
+                         Connection.crearUsuario();
+                         break;
+                     case 4:
+                         System.out.println("4.- Eliminar producto del carrito");
+                         break;
+                     case 0:
+                         break;
+                 }
              }
         }
         System.out.println("TPO realizado por: ");
