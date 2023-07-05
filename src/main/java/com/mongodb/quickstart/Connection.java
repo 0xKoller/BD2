@@ -1,5 +1,7 @@
 package com.mongodb.quickstart;
 
+import cassandraConnector.CassandraConnector;
+import cassandraConnector.PercistenciaLog;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -101,9 +103,6 @@ public class Connection {
                 String nombre = document.getString("name");
                 Double price = document.getDouble("price");
                 String code = document.getString("code");
-                List<String> info = new ArrayList<>();
-                info.add(nombre);
-                info.add(price.toString());
                 System.out.println("Nombre: "+nombre+" | Precio: "+price+" | Codigo: "+code);
 
             }
@@ -143,22 +142,34 @@ public class Connection {
                     System.out.println("El valor del precio ingresado no es válido. Se omitirá la actualización del precio.");
                 }
             }
+            /*FindIterable<Document> documents = collection.find(filter);
+            MongoCursor<Document> cursor = documents.iterator();
+
+            // Verificar si se encontró el producto
+            if (cursor.hasNext()) {
+                Document document = cursor.next();
+                String nombre = document.getString("name");
+                String descripcion = document.getString("desc");
+                String precio = document.getString("price");
+                PercistenciaLog.insertLog(code,nombre,nuevoNombre,descripcion,nuevaDescripcion,precio,nuevoPrecio);
+            }*/
+
 
             // Crear el documento con las actualizaciones
             Document updateDocument = new Document();
 
             // Actualizar el nombre si se proporciona un nuevo valor
             if (!nuevoNombre.isEmpty()) {
-                updateDocument.append("nombre", nuevoNombre);
+                updateDocument.append("name", nuevoNombre);
             }
 
             // Actualizar la descripción si se proporciona un nuevo valor
             if (!nuevaDescripcion.isEmpty()) {
-                updateDocument.append("descripcion", nuevaDescripcion);
+                updateDocument.append("desc", nuevaDescripcion);
             }
 
             // Actualizar el precio si se proporciona un nuevo valor
-            nuevoPrecio.ifPresent(precio -> updateDocument.append("precio", precio));
+            nuevoPrecio.ifPresent(precio -> updateDocument.append("price", precio));
 
             // Verificar si se proporcionó al menos un campo para actualizar
             if (updateDocument.isEmpty()) {
@@ -175,6 +186,8 @@ public class Connection {
             } else {
                 System.out.println("No se encontró el producto con el código especificado.");
             }
+
+
         }
     }
 

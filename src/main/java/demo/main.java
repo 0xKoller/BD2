@@ -14,8 +14,6 @@ public class main {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("factura");
-        EntityManager em = emf.createEntityManager();
         Scanner scanner = new Scanner(System.in);
         int opt = -1;
         while (opt != 1 && opt != 2){
@@ -93,12 +91,7 @@ public class main {
                          System.out.print("Carrito borrado con exito ");
                          break;
                      case 6:
-                         EntityTransaction transaction = em.getTransaction();
-                         transaction.begin();
 
-
-
-                         transaction.commit();
                          break;
                      case 7:
                          Connection.verProductos();

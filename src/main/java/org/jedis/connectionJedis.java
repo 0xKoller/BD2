@@ -46,24 +46,6 @@ public class connectionJedis {
         }
     }
 
-    public static void printAllCarts() {
-        try (Jedis jedis = pool.getResource()) {
-            Set<String> cartKeys = jedis.keys("cart:*");
-            for (String cartKey : cartKeys) {
-                Map<String, String> cartItems = jedis.hgetAll(cartKey);
-                String cartId = cartKey.substring("cart:".length());
-                String clienteId = cartItems.get("clienteId");
-                System.out.println("Carrito: " + cartId + ", Cliente: " + clienteId);
-                for (Map.Entry<String, String> entry : cartItems.entrySet()) {
-                    String itemId = entry.getKey();
-                    if (!"clienteId".equals(itemId)) {
-                        int cantidad = Integer.parseInt(entry.getValue());
-                        System.out.println("  Item: " + itemId + ", Cantidad: " + cantidad);
-                    }
-                }
-            }
-        }
-    }
 
     public static void updateCartItemQuantity(String cartId, String itemId, int cantidadNueva) {
         try (Jedis jedis = pool.getResource()) {
