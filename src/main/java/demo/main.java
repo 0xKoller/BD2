@@ -49,6 +49,7 @@ public class main {
         }
         if (opt == 1) {
             List<String> username = Connection.seleccionUsuario();
+            UserSession.loginUser();
             String idUser = username.get(0);
             System.out.println("======================");
             System.out.println("Bienvenido "+ username.get(1));
@@ -63,6 +64,7 @@ public class main {
                  System.out.println("0.- SALIR");
                  System.out.print("Ingrese una opcion: ");
                  opt = scanner.nextInt();
+
                  switch (opt) {
                      case 1:
 //                       El usuario seleccione el carrito para ver los elementos
@@ -120,6 +122,7 @@ public class main {
                          Connection.verProductos();
                          break;
                  }
+                 UserSession.logoutUser();
              }
          }else{
              while (opt != 0){
