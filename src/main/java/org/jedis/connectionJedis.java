@@ -1,24 +1,36 @@
 package org.jedis;
 
+import com.mongodb.quickstart.Connection;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import java.util.Set;
 
 
 import java.util.*;
 
 public class connectionJedis {
     private static JedisPool pool = new JedisPool("localhost", 6379);
-    private static Map<String, Stack<Map<byte[],byte[]>>> cartUndoMap = new HashMap<>();
+    private static Map<String, Stack<Map<byte[], byte[]>>> cartUndoMap = new HashMap<>();
 
     public static void addItemToCart(String cartId, String clienteId, String itemId, int quantity) {
         try (Jedis jedis = pool.getResource()) {
-            saveState(cartId, jedis.hgetAll(cartId.getBytes()));
-            jedis.hset(cartId.getBytes(), itemId.getBytes(), String.valueOf(quantity).getBytes());
-            jedis.hset(cartId.getBytes(), "clienteId".getBytes(), clienteId.getBytes());
+            // Verificar si el artículo existe en el catálogo
+            boolean itemExists = Connection.checkIfItemExists(itemId);
+
+            if (itemExists) {
+                saveState(cartId, jedis.hgetAll(cartId.getBytes()));
+                jedis.hset(cartId.getBytes(), itemId.getBytes(), String.valueOf(quantity).getBytes());
+                jedis.hset(cartId.getBytes(), "clienteId".getBytes(), clienteId.getBytes());
+            } else {
+                System.out.println("El artículo no existe en el catálogo.");
+            }
         }
     }
 
+
     public static void printCartItems(String idUser) {
+
+
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese el ID del carrito: ");
         String cartIdBuscar = scanner.nextLine();
@@ -29,6 +41,25 @@ public class connectionJedis {
                 if (!"clienteId".equals(itemId)) {
                     int cantidad = Integer.parseInt(new String(entry.getValue()));
                     System.out.println("Item: " + itemId + ", Cantidad: " + cantidad);
+                }
+            }
+        }
+    }
+
+    public static void printAllCarts() {
+        try (Jedis jedis = pool.getResource()) {
+            Set<String> cartKeys = jedis.keys("cart:*");
+            for (String cartKey : cartKeys) {
+                Map<String, String> cartItems = jedis.hgetAll(cartKey);
+                String cartId = cartKey.substring("cart:".length());
+                String clienteId = cartItems.get("clienteId");
+                System.out.println("Carrito: " + cartId + ", Cliente: " + clienteId);
+                for (Map.Entry<String, String> entry : cartItems.entrySet()) {
+                    String itemId = entry.getKey();
+                    if (!"clienteId".equals(itemId)) {
+                        int cantidad = Integer.parseInt(entry.getValue());
+                        System.out.println("  Item: " + itemId + ", Cantidad: " + cantidad);
+                    }
                 }
             }
         }
@@ -62,12 +93,14 @@ public class connectionJedis {
         }
         undoStack.push(new HashMap<>(currentState));
     }
+
     public static void removeItemCart(String cartId, String itemId) {
         try (Jedis jedis = pool.getResource()) {
             saveState(cartId, jedis.hgetAll(cartId.getBytes()));
             jedis.hdel(cartId.getBytes(), itemId.getBytes());
         }
     }
+
     public static void deleteCart(String cartId) {
         try (Jedis jedis = pool.getResource()) {
             saveState(cartId, jedis.hgetAll(cartId.getBytes()));
