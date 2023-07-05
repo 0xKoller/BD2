@@ -4,12 +4,18 @@ import com.mongodb.quickstart.Connection;
 import java.util.List;
 import org.jedis.connectionJedis;
 import java.util.Scanner;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
 
 public class main {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("factura");
+        EntityManager em = emf.createEntityManager();
         Scanner scanner = new Scanner(System.in);
         int opt = -1;
         while (opt != 1 && opt != 2){
@@ -87,7 +93,12 @@ public class main {
                          System.out.print("Carrito borrado con exito ");
                          break;
                      case 6:
-                         System.out.println("6.- Facturar carrito");
+                         EntityTransaction transaction = em.getTransaction();
+                         transaction.begin();
+
+
+
+                         transaction.commit();
                          break;
                      case 7:
                          Connection.verProductos();
@@ -126,5 +137,9 @@ public class main {
              }
         }
         System.out.println("TPO realizado por: ");
+    }
+
+    private static void facturarPedido(){
+
     }
 }
