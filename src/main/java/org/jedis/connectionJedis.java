@@ -2,6 +2,11 @@ package org.jedis;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.ScanParams;
+import redis.clients.jedis.ScanResult;
+import redis.clients.jedis.Tuple;
+import java.util.Set;
+
 
 import java.util.*;
 
@@ -17,9 +22,15 @@ public class connectionJedis {
         }
     }
 
-    public static void printCartItems(String cartId) {
+    public static void printCartItems(String idUser) {
+
+
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el ID del carrito: ");
+        String cartIdBuscar = scanner.nextLine();
         try (Jedis jedis = pool.getResource()) {
-            Map<byte[], byte[]> cartItems = jedis.hgetAll(cartId.getBytes());
+            Map<byte[], byte[]> cartItems = jedis.hgetAll(cartIdBuscar.getBytes());
             for (Map.Entry<byte[], byte[]> entry : cartItems.entrySet()) {
                 String itemId = new String(entry.getKey());
                 if (!"clienteId".equals(itemId)) {
@@ -71,10 +82,17 @@ public class connectionJedis {
         }
     }
 
+    private static void verCarritos(){
+        ScanParams scanParams = new ScanParams().count(100); // Configura el número de claves a escanear por iteración
+        String cursor = "0";
+        do {
+            ScanResult<String> scanResult = jedis.scan(cursor, scanParams);
+            cursor = scanResult.getStringCursor();
+            for (String key : scanResult.getResult()) {
+                String value = jedis.get(key);
+                System.out.println("Key: " + key + ", Value: " + value);
+            }
+        } while (!cursor.equals("0"));
 
-
-
-
-
-
+    }
 }

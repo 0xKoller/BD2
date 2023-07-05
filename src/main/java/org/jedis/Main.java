@@ -28,7 +28,7 @@ public class Main {
         String cartIdBuscar = scanner.nextLine();
 
         // Obtener la cantidad de elementos en el carrito
-        connectionJedis.printCartItems(cartIdBuscar);
+//        connectionJedis.printCartItems();
 
         // Actualizar el carrito
         System.out.print("Ingrese el ID del carrito para actualizar: ");

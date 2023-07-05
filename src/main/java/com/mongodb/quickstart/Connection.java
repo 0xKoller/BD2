@@ -7,11 +7,8 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.FindIterable;
 import org.bson.Document;
-
-import org.bson.Document;
 import org.bson.conversions.Bson;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 
 import java.util.*;
@@ -20,31 +17,49 @@ public class Connection {
     private static final String CONNECTION_STRING = "mongodb://localhost:27017";
     private static final String DATABASE_NAME = "tpo";
 
+//    public static void main(String[] args) {
+//        try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
+//            List<Document> databases = mongoClient.listDatabases().into(new ArrayList<>());
+//            MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+//
+//            // Agregar un nuevo producto
+//            //agregarProducto("Producto test","2342", "Descripción del producto 1", 99.99,23);
+//
+//            // Ver todos los productos
+//            //verProductos();
+//            actualizarProducto();
+//        }
+//    }
 
-    public static void main(String[] args) {
-        try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
-            List<Document> databases = mongoClient.listDatabases().into(new ArrayList<>());
-            MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
-
-            // Agregar un nuevo producto
-            //agregarProducto("Producto test","2342", "Descripción del producto 1", 99.99,23);
-
-            // Ver todos los productos
-            //verProductos();
-            actualizarProducto();
+    public static void agregarProducto() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingrese el nombre: ");
+        String nombre = scanner.nextLine();
+        System.out.println("Ingrese el nombre: ");
+        String code = generarCode();
+        System.out.println("Ingrese el descuento: ");
+        Integer desc = scanner.nextInt();
+        System.out.println("Ingrese el precio: ");
+        Double price = scanner.nextDouble();
+        System.out.println("Ingrese el stock: ");
+        Integer stock = scanner.nextInt();
+        List<String> fotos = new ArrayList<>();
+        String opt = "";
+        while(opt != "N"){
+            System.out.println("Ingrese el link de la imagen: ");
+            String foto = scanner.nextLine();
+            fotos.add(foto);
+            System.out.println("Si quiere seguir agregando imagenes, coloque S y si quiere parar coloque N: ");
+            opt = scanner.nextLine();
         }
-    }
-
-    public static void agregarProducto(String nombre,String code, String descripcion,String fotos, double precio, int stock) {
         try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
             MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
             MongoCollection<Document> collection = database.getCollection("productos");
-
             Document producto = new Document()
-                    .append("nombre", nombre)
+                    .append("name", nombre)
                     .append("code", code)
-                    .append("descripcion", descripcion)
-                    .append("precio", precio)
+                    .append("desc", desc)
+                    .append("precio", price)
                     .append("stock", stock);
             // Agregar la foto si se proporciona un valor no nulo
             if (fotos != null && !fotos.isEmpty()) {
@@ -220,6 +235,37 @@ public class Connection {
         Random random = new Random();
         String caracteres = "abcdefghijklmnopqrstuvwxyz0123456789";
         int longitud = 5;
+        String nuevoId = "";
+        boolean idRepetido = true;
+        while (idRepetido) {
+            StringBuilder sb = new StringBuilder(longitud);
+            for (int i = 0; i < longitud; i++) {
+                int indice = random.nextInt(caracteres.length());
+                char caracter = caracteres.charAt(indice);
+                sb.append(caracter);
+            }
+            nuevoId = sb.toString();
+            idRepetido = ids.contains(nuevoId);
+        }
+        return nuevoId;
+    }
+
+    private static String generarCode(){
+        MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = database.getCollection("productos");
+        MongoCursor<Document> cursor = collection.find().iterator();
+        List<String> ids = new ArrayList<>();
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
+            String id = document.getString("code");
+            ids.add(id);
+        }
+        cursor.close();
+        mongoClient.close();
+        Random random = new Random();
+        String caracteres = "0123456789";
+        int longitud = 4;
         String nuevoId = "";
         boolean idRepetido = true;
         while (idRepetido) {

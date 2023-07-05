@@ -1,35 +1,10 @@
 package demo;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.quickstart.Connection;
-import org.bson.Document;
-import org.bson.Document;
-import org.bson.types.ObjectId;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jedis.connectionJedis;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import java.util.Scanner;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Host;
-import com.datastax.driver.core.Metadata;
-import com.datastax.driver.core.Session;
-
-import static java.lang.System.out;
 
 public class main {
 
@@ -68,17 +43,13 @@ public class main {
                  switch (opt) {
                      case 1:
 //                       El usuario seleccione el carrito para ver los elementos
-                         System.out.print("Ingrese el ID del carrito que desea ver: ");
-                         String cartIdBuscar = scanner.nextLine();
 
-                         connectionJedis.printCartItems(cartIdBuscar);
+                         connectionJedis.printCartItems(idUser);
                          break;
                      case 2:
                         System.out.print("Ingrese el ID del carrito: ");
                         String cartId = scanner.nextLine();
-
                         scanner.nextLine();
-
                         System.out.print("Ingrese el ID del artículo: ");
                         String itemId = scanner.nextLine();
 
@@ -106,7 +77,7 @@ public class main {
 
                          connectionJedis.removeItemCart(cartIdDel,itemIdDel);
                          System.out.print("El item fue borrado con exito ");
-                         connectionJedis.printCartItems(cartIdDel);
+                         connectionJedis.printCartItems(idUser);
                          break;
                      case 5:
                          System.out.print("Ingrese el ID del carrito para Eliminar un item: ");
@@ -121,14 +92,18 @@ public class main {
                      case 7:
                          Connection.verProductos();
                          break;
+                     case 0:
+                         UserSession.logoutUser();
+                         break;
                  }
-                 UserSession.logoutUser();
+
              }
          }else{
              while (opt != 0){
                  System.out.println("1.- Ver prodcutos");
                  System.out.println("2.- Modificar producto");
                  System.out.println("3.- Crear usuario");
+                 System.out.println("4.- Agregar producto al catalogo");
                  System.out.println("0.- SALIR");
                  System.out.print("Ingrese una opcion: ");
                  opt = scanner.nextInt();
@@ -141,6 +116,9 @@ public class main {
                          break;
                      case 3:
                          Connection.crearUsuario();
+                         break;
+                     case 4:
+                         Connection.agregarProducto();
                          break;
                      case 0:
                          break;
