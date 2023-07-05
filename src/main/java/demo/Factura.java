@@ -12,6 +12,7 @@ public class Factura {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String id_user;
     private int doc;
     private double importe;
