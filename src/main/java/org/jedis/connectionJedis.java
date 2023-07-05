@@ -1,5 +1,6 @@
 package org.jedis;
 
+import com.mongodb.quickstart.Connection;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import java.util.Set;
@@ -13,11 +14,19 @@ public class connectionJedis {
 
     public static void addItemToCart(String cartId, String clienteId, String itemId, int quantity) {
         try (Jedis jedis = pool.getResource()) {
-            saveState(cartId, jedis.hgetAll(cartId.getBytes()));
-            jedis.hset(cartId.getBytes(), itemId.getBytes(), String.valueOf(quantity).getBytes());
-            jedis.hset(cartId.getBytes(), "clienteId".getBytes(), clienteId.getBytes());
+            // Verificar si el artículo existe en el catálogo
+            boolean itemExists = Connection.checkIfItemExists(itemId);
+
+            if (itemExists) {
+                saveState(cartId, jedis.hgetAll(cartId.getBytes()));
+                jedis.hset(cartId.getBytes(), itemId.getBytes(), String.valueOf(quantity).getBytes());
+                jedis.hset(cartId.getBytes(), "clienteId".getBytes(), clienteId.getBytes());
+            } else {
+                System.out.println("El artículo no existe en el catálogo.");
+            }
         }
     }
+
 
     public static void printCartItems(String idUser) {
 

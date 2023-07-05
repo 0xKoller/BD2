@@ -1,5 +1,6 @@
 package com.mongodb.quickstart;
 
+import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -30,7 +31,24 @@ public class Connection {
 //            actualizarProducto();
 //        }
 //    }
+    public static boolean checkIfItemExists(String itemId) {
+        // Aquí se realiza la conexión a MongoDB y se consulta si el artículo con el ID especificado existe en la colección del catálogo
+        // Retorna true si el artículo existe, false si no existe
 
+        // Ejemplo de implementación:
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase database = mongoClient.getDatabase("tpo");
+            MongoCollection<Document> catalogCollection = database.getCollection("productos");
+
+            Document query = new Document("code", itemId);
+            long count = catalogCollection.countDocuments(query);
+
+            return count > 0;
+        } catch (MongoException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     public static void agregarProducto() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese el nombre: ");
