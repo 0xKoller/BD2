@@ -10,6 +10,7 @@ public class main {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
+
         Scanner scanner = new Scanner(System.in);
         int opt = -1;
         while (opt != 1 && opt != 2){
@@ -28,6 +29,7 @@ public class main {
             String idUser = username.get(0);
             System.out.println("======================");
             System.out.println("Bienvenido "+ username.get(1));
+            connectionJedis.printAllCarts();
              while (opt != 0){
                  System.out.println("1.- Ver carritos");
                  System.out.println("2.- Agregar al carrito");
