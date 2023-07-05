@@ -153,7 +153,5 @@ public class PercistenciaLog {
             }
         }
 
-
     }
 }
-
