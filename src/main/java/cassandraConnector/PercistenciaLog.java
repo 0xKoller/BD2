@@ -23,8 +23,8 @@ public class PercistenciaLog {
     }
 
     public void insertLog(int idProd, String campo, String antes, String despues, int idAdmin) {
-        String query = "INSERT INTO tpo.log_catalogo (id_producto,campo_modificado,antes,despues,id_admin) " +
-                "VALUES ("+ idProd +", '" + campo +"','" + antes + "','" + despues + "'," + idAdmin + ");";
+        String query = "INSERT INTO tpo.log_catalogo (id,id_producto,campo_modificado,antes,despues,id_admin) " +
+                "VALUES (uuid()"+","+ idProd +", '" + campo +"','" + antes + "','" + despues + "'," + idAdmin + ");";
 
         session.execute(query);
         System.out.println("-------------------------");
@@ -58,7 +58,7 @@ public class PercistenciaLog {
     public void selectProdEspecifico(int prod){
         String keyspace = "tpo;";
         session.execute("USE " + keyspace);
-        String query = "SELECT * FROM log_catalogo WHERE id_producto = " + prod + ";";
+        String query = "SELECT * FROM log_catalogo WHERE id_producto = " + prod + " allow filtering;";
         ResultSet resultSet = session.execute(query);
 
 
@@ -82,7 +82,7 @@ public class PercistenciaLog {
         String keyspace = "tpo;";
         session.execute("USE " + keyspace);
         String query = "SELECT * FROM log_catalogo WHERE id_producto = " + prod + " AND " +
-                "campo_modificado = '"+ campo +"';";
+                "campo_modificado = '"+ campo +"' allow filtering ;";
 
         ResultSet resultSet = session.execute(query);
 
@@ -125,9 +125,10 @@ public class PercistenciaLog {
             decision = sc.nextInt();
         }
 
+        /* descomentar cuando se quiere hacer un insert. Ver como implementar
         PercistenciaLog insert = new PercistenciaLog(ipAddress, port);
-        insert.insertLog(10, "Precio", "3", "4", 1147157);
-        insert.close();
+        insert.insertLog(10, "precio", "20", "15", 1147157);
+        insert.close();*/
 
         if(decision == 1){
             PercistenciaLog selectAll = new PercistenciaLog(ipAddress,port);
@@ -155,3 +156,4 @@ public class PercistenciaLog {
 
     }
 }
+
