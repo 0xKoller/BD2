@@ -29,8 +29,6 @@ public class connectionJedis {
 
 
     public static void printCartItems(String idUser) {
-
-
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese el ID del carrito: ");
         String cartIdBuscar = scanner.nextLine();

@@ -11,6 +11,8 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.util.*;
 
@@ -220,13 +222,61 @@ public class Connection {
         mongoClient.close();
     }
 
-    public static String facturarCarrito(Object carrito){
-        Object factura = new Object();
+    public static String facturarCarrito(String carrito){
+        Scanner scanner = new Scanner(System.in);
+        JedisPool pool = new JedisPool("localhost", 6379);
+        Map<String, Stack<Map<byte[], byte[]>>> cartUndoMap = new HashMap<>();
+        boolean validarStock = true;
+        int metodo_pago = -1;
+        boolean state = false;
+        try (Jedis jedis = pool.getResource()) {
+            Map<byte[], byte[]> cartItems = jedis.hgetAll(carrito.getBytes());
+            for (Map.Entry<byte[], byte[]> entry : cartItems.entrySet()) {
+                String itemId = new String(entry.getKey());
+                validarStock = verificarStock(itemId);
+                if(validarStock != true){break;}
+            }
+        }
+
+        while (true){
+            System.out.println("Pagar con (1) Tarjeta, (2)Efectivo o (3)Cuenta Corriente: ");
+            metodo_pago = scanner.nextInt();
+            switch (metodo_pago){
+                case 1:
+                    state= true;
+                    break;
+                case 2:
+                    state= true;
+                    break;
+                case 3:
+//                    verificarCC(id);
+                    break;
+            }
+            break;
+        }
+
+        if(validarStock == true){
+            return  "Todo Ok";
+        }else{
+            return "Hay productos faltantes en stock.";
+        }
+    }
+
+    private static boolean verificarStock(String code){
 
 
+        return true;
+    }
 
-
-        return  "Todo Ok";
+    private static boolean verificarCC(String id){
+        try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
+            MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+            MongoCollection<Document> collection = database.getCollection("cc");
+            FindIterable<Document> documents = collection.find();
+            MongoCursor<Document> cursor = documents.iterator();
+            while (cursor.hasNext()) {
+                Document document = cursor.next();}}
+        return true;
     }
 
     private static String generarId(String table){

@@ -36,6 +36,7 @@ public class main {
                  System.out.println("5.- Eliminar el carrito");
                  System.out.println("6.- Facturar carrito");
                  System.out.println("7.- Ver prodcutos");
+                 System.out.println("8.- Pagar factura");
                  System.out.println("0.- SALIR");
                  System.out.print("Ingrese una opcion: ");
                  opt = scanner.nextInt();
