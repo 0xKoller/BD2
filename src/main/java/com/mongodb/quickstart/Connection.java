@@ -18,24 +18,8 @@ public class Connection {
     private static final String CONNECTION_STRING = "mongodb://localhost:27017";
     private static final String DATABASE_NAME = "tpo";
 
-//    public static void main(String[] args) {
-//        try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
-//            List<Document> databases = mongoClient.listDatabases().into(new ArrayList<>());
-//            MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
-//
-//            // Agregar un nuevo producto
-//            //agregarProducto("Producto test","2342", "Descripción del producto 1", 99.99,23);
-//
-//            // Ver todos los productos
-//            //verProductos();
-//            actualizarProducto();
-//        }
-//    }
     public static boolean checkIfItemExists(String itemId) {
-        // Aquí se realiza la conexión a MongoDB y se consulta si el artículo con el ID especificado existe en la colección del catálogo
-        // Retorna true si el artículo existe, false si no existe
 
-        // Ejemplo de implementación:
         try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
             MongoDatabase database = mongoClient.getDatabase("tpo");
             MongoCollection<Document> catalogCollection = database.getCollection("productos");
@@ -89,7 +73,6 @@ public class Connection {
     }
 
     public static void verProductos() {
-        Map<String, List<String>> productos = new HashMap<>();
         try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
             MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
             MongoCollection<Document> collection = database.getCollection("productos");
