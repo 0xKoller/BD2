@@ -76,7 +76,6 @@ public class Connection {
         try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
             MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
             MongoCollection<Document> collection = database.getCollection("productos");
-
             FindIterable<Document> documents = collection.find();
             MongoCursor<Document> cursor = documents.iterator();
             while (cursor.hasNext()) {
@@ -220,6 +219,16 @@ public class Connection {
         collection.insertOne(document);
         mongoClient.close();
     }
+
+    public static String facturarCarrito(Object carrito){
+        Object factura = new Object();
+
+
+
+
+        return  "Todo Ok";
+    }
+
     private static String generarId(String table){
         MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
         MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
@@ -281,5 +290,8 @@ public class Connection {
         }
         return nuevoId;
     }
+
+
+
 }
 

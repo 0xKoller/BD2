@@ -43,12 +43,12 @@ public class main {
                  switch (opt) {
                      case 1:
 //                       El usuario seleccione el carrito para ver los elementos
-
                          connectionJedis.printCartItems(idUser);
                          break;
                      case 2:
                         System.out.print("Ingrese el ID del carrito: ");
                         String cartId = scanner.nextLine();
+
                         scanner.nextLine();
                         System.out.print("Ingrese el ID del artículo: ");
                         String itemId = scanner.nextLine();
@@ -87,6 +87,7 @@ public class main {
                          System.out.print("Carrito borrado con exito ");
                          break;
                      case 6:
+
                          break;
                      case 7:
                          Connection.verProductos();
