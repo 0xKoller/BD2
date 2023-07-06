@@ -1,6 +1,6 @@
 package com.mongodb.quickstart;
 
-import cassandraConnector.CassandraConnector;
+
 import cassandraConnector.PercistenciaLog;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
@@ -136,6 +136,7 @@ public class Connection {
                 String descripcion = document.getString("desc");
                 String precio = document.getString("price");
                 PercistenciaLog.insertLog(code,nombre,nuevoNombre,descripcion,nuevaDescripcion,precio,nuevoPrecio);
+
             }*/
 
 
