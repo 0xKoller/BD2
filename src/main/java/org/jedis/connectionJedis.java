@@ -86,4 +86,29 @@ public class connectionJedis {
             jedis.del(cartId.getBytes());
         }
     }
+    public static String getClienteIdFromCart(String cartId) {
+        try (Jedis jedis = pool.getResource()) {
+            byte[] clienteIdBytes = jedis.hget(cartId.getBytes(), "clienteId".getBytes());
+            if (clienteIdBytes != null) {
+                return new String(clienteIdBytes);
+            } else {
+                return null;
+            }
+        }
+    }
+    public static HashMap<String, Object> extractCartProducts(String cartId) {
+        try (Jedis jedis = pool.getResource()) {
+            Map<String, String> cartData = jedis.hgetAll(cartId);
+
+            HashMap<String, Object> productos = new HashMap<>();
+            for (Map.Entry<String, String> entry : cartData.entrySet()) {
+                String itemId = entry.getKey();
+                int quantity = Integer.parseInt(entry.getValue());
+
+                productos.put(itemId, quantity);
+            }
+
+            return productos;
+        }
+    }
 }

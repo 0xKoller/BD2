@@ -14,6 +14,7 @@ import org.bson.conversions.Bson;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
 import org.jedis.Carrito;
+import org.jedis.connectionJedis;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -180,6 +181,7 @@ public class Connection {
         }
     }
 
+
     public static List<String> seleccionUsuario() {
         Map<String, String> usuarios = new HashMap<>();
         List<String> user = new ArrayList<>();
@@ -280,8 +282,10 @@ public class Connection {
             }
             if (!state) {
                 if (validarStock == true) {
+                    String id_del_usuario = connectionJedis.getClienteIdFromCart(id);
+
                     factura.setId_user(id_del_usuario);
-                    factura.setProductos(productos);
+                    factura.setProductos(connectionJedis.extractCartProducts(id));
                     if (metodo_pago != 3) {
                         MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
                         MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
