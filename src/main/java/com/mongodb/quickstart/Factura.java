@@ -1,17 +1,16 @@
-package demo;
+package com.mongodb.quickstart;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.mongodb.client.*;
+import org.bson.Document;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
-@Entity
 public class Factura {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
+    private String id;
 
     private String id_user;
     private int doc;
@@ -21,8 +20,8 @@ public class Factura {
     private String id_emple;
     private Date fecha;
 
+    private boolean estado;
 
-    // Constructor vacío (obligatorio para JPA)
     public Factura() {
     }
 
@@ -36,12 +35,30 @@ public class Factura {
         this.fecha = fecha;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.id = generarId();
+    }
+
+    private static String generarId(){
+        Random random = new Random();
+        String caracteres = "0123456789";
+        int longitud = 10;
+        String nuevoId = "";
+        boolean idRepetido = true;
+        while (idRepetido) {
+            StringBuilder sb = new StringBuilder(longitud);
+            for (int i = 0; i < longitud; i++) {
+                int indice = random.nextInt(caracteres.length());
+                char caracter = caracteres.charAt(indice);
+                sb.append(caracter);
+            }
+            nuevoId = sb.toString();
+        }
+        return nuevoId;
     }
 
     public String getId_user() {
@@ -99,5 +116,4 @@ public class Factura {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
 }

@@ -4,10 +4,6 @@ import com.mongodb.quickstart.Connection;
 import java.util.List;
 import org.jedis.connectionJedis;
 import java.util.Scanner;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 
 public class main {
@@ -40,6 +36,7 @@ public class main {
                  System.out.println("5.- Eliminar el carrito");
                  System.out.println("6.- Facturar carrito");
                  System.out.println("7.- Ver prodcutos");
+                 System.out.println("8.- Pagar factura");
                  System.out.println("0.- SALIR");
                  System.out.print("Ingrese una opcion: ");
                  opt = scanner.nextInt();
@@ -47,12 +44,12 @@ public class main {
                  switch (opt) {
                      case 1:
 //                       El usuario seleccione el carrito para ver los elementos
-
                          connectionJedis.printCartItems(idUser);
                          break;
                      case 2:
                         System.out.print("Ingrese el ID del carrito: ");
                         String cartId = scanner.nextLine();
+
                         scanner.nextLine();
                         System.out.print("Ingrese el ID del artículo: ");
                         String itemId = scanner.nextLine();
@@ -130,9 +127,5 @@ public class main {
              }
         }
         System.out.println("TPO realizado por: ");
-    }
-
-    private static void facturarPedido(){
-
     }
 }
