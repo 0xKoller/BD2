@@ -548,8 +548,13 @@ public class Connection {
             MongoCollection<Document> collectionUsers = database.getCollection("usuarios");
 
             // Realizar la búsqueda por código dentro del campo de array
-            Document query = new Document("arrayField", new Document("$elemMatch", new Document("codigo", factSelecc)));
+            Document query = new Document("facturas", new Document("$elemMatch", new Document("codigo", factSelecc)));
             Document documentUsers = collectionUsers.find(query).first();
+            double importeViejo = document.getDouble("saldo");
+            double importeNuevo = importeViejo - documentUsers.getDouble("importe");
+            Document update = new Document("$set", new Document("saldo", importeNuevo));
+            Document filter = new Document("id", cc);
+            collection.updateOne(filter,update);
         }
     }
 }
