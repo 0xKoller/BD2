@@ -3,44 +3,38 @@ package com.mongodb.quickstart;
 import com.mongodb.client.*;
 import org.bson.Document;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Factura {
 
-    private String id;
+    private static String id;
 
-    private String id_user;
-    private int doc;
-    private double importe;
-    private List<String> productos;
-    private String metodo;
-    private String id_emple;
-    private Date fecha;
+    private static  String id_user;
+    private  static double importe;
+    private static  HashMap<String, Object> productos;
+    private  static boolean metodo;
+    private  static String id_emple;
+    private static  Date fecha;
 
     private boolean estado;
 
     public Factura() {
+        this.id = generarId();
+        this.fecha = new Date();
     }
 
-    public Factura(String id_user, int doc, double importe, List<String> productos, String metodo, String id_emple, Date fecha) {
+    public Factura(String id_user, double importe, HashMap<String, Object> productos, boolean metodo, String id_emple) {
         this.id_user = id_user;
-        this.doc = doc;
         this.importe = importe;
         this.productos = productos;
         this.metodo = metodo;
         this.id_emple = id_emple;
-        this.fecha = fecha;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
         this.id = generarId();
+        this.fecha = new Date();
+    }
+
+    public static String getId() {
+        return id;
     }
 
     private static String generarId(){
@@ -61,7 +55,7 @@ public class Factura {
         return nuevoId;
     }
 
-    public String getId_user() {
+    public  static String getId_user() {
         return id_user;
     }
 
@@ -69,15 +63,7 @@ public class Factura {
         this.id_user = id_user;
     }
 
-    public int getDoc() {
-        return doc;
-    }
-
-    public void setDoc(int doc) {
-        this.doc = doc;
-    }
-
-    public double getImporte() {
+    public  static double getImporte() {
         return importe;
     }
 
@@ -85,35 +71,40 @@ public class Factura {
         this.importe = importe;
     }
 
-    public List<String> getProductos() {
-        return productos;
+
+    public Document getProductos(){
+        Document mapProductos = new Document(this.productos);
+        return mapProductos;
     }
 
-    public void setProductos(List<String> productos) {
+    public void setProductos(HashMap<String, Object> productos) {
         this.productos = productos;
+        float resultado = 0;
+        for (Object value : productos.values()) {
+            float floatValue = Float.parseFloat((String) value);
+            resultado += floatValue;
+        }
+        setImporte(resultado);
     }
 
-    public String getMetodo() {
+    public static  boolean getMetodo() {
         return metodo;
     }
 
-    public void setMetodo(String metodo) {
+    public void setMetodo(boolean metodo) {
         this.metodo = metodo;
     }
 
-    public String getId_emple() {
+    public  static String getId_emple() {
         return id_emple;
     }
 
-    public void setId_emple(String id_emple) {
-        this.id_emple = id_emple;
+    public  static void setId_emple(String id_emple) {
+        Factura.id_emple = id_emple;
     }
 
-    public Date getFecha() {
+    public  static Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
 }

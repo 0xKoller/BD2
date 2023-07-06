@@ -16,7 +16,6 @@ public class connectionJedis {
         try (Jedis jedis = pool.getResource()) {
             // Verificar si el artículo existe en el catálogo
             boolean itemExists = Connection.checkIfItemExists(itemId);
-
             if (itemExists) {
                 saveState(cartId, jedis.hgetAll(cartId.getBytes()));
                 jedis.hset(cartId.getBytes(), itemId.getBytes(), String.valueOf(quantity).getBytes());

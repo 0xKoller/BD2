@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 
 public class Carrito {
-    private String id;
-    private String id_client;
-    private HashMap<String, String> productos;
-    private float total;
+    private static String id;
+    private static String id_client;
+    private static HashMap<String, String> productos;
+    private static float total;
 
-    public String getId() {
+    public static String getId() {
         return id;
     }
 
