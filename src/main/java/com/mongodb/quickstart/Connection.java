@@ -19,6 +19,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import javax.print.Doc;
+import java.time.Duration;
 import java.util.*;
 
 public class Connection {
@@ -213,6 +214,81 @@ public class Connection {
         user.add(userInput);
         user.add(usuarios.get(userInput));
         return user;
+    }
+    public static void addToClientDuracion(String idUser, int duracion) {
+        try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
+            MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+            MongoCollection<Document> collection = database.getCollection("usuarios");
+
+            // Crear el filtro para buscar el cliente por el ID del usuario
+            Document filter = new Document("id", idUser);
+
+            // Crear el documento con el valor a agregar a la lista
+            Document valueToAdd = new Document("lista", duracion);
+
+            // Crear el documento de actualización para agregar el valor a la lista
+            Document updateDocument = new Document("$push", valueToAdd);
+
+            // Actualizar el cliente en la colección
+            collection.updateOne(filter, updateDocument);
+
+            System.out.println("Valor agregado correctamente al cliente.");
+            actualizarEstadoCliente(idUser);
+        }
+    }
+    public static void actualizarEstadoCliente(String idUser) {
+        try (MongoClient mongoClient = MongoClients.create(CONNECTION_STRING)) {
+            MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+            MongoCollection<Document> collection = database.getCollection("usuarios");
+
+            // Filtrar por ID del cliente
+            Document filter = new Document("id", idUser);
+
+            // Obtener el cliente
+            Document cliente = collection.find(filter).first();
+
+            // Verificar si el cliente existe
+            if (cliente != null) {
+                // Obtener la lista de números
+                List<Integer> numeros = cliente.getList("lista", Integer.class);
+
+                // Calcular el promedio
+                double promedio = calcularPromedio(numeros);
+
+                // Obtener el nombre basado en el promedio
+                String estado = obtenerNombre(promedio);
+
+                // Actualizar el nombre en el cliente
+                cliente.put("tipoCliente", estado);
+                collection.replaceOne(filter, cliente);
+
+                // Imprimir el resultado
+                System.out.println("El cliente es de tipo: " + estado);
+            } else {
+                System.out.println("No se encontró el cliente con el ID especificado.");
+            }
+        }
+    }
+    private static double calcularPromedio(List<Integer> numeros) {
+        if (numeros == null || numeros.isEmpty()) {
+            return 0.0;
+        }
+
+        int suma = 0;
+        for (int numero : numeros) {
+            suma += numero;
+        }
+
+        return (double) suma / numeros.size();
+    }
+    private static String obtenerNombre(double promedio) {
+        if (promedio > 240) {
+            return "TOP";
+        } else if (240 > promedio && promedio > 120) {
+            return "MEDIUM";
+        }else{
+            return "LOW";
+        }
     }
 
     public static void crearUsuario() {

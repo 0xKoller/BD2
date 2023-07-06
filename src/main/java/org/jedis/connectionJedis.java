@@ -12,25 +12,56 @@ public class connectionJedis {
     private static JedisPool pool = new JedisPool("localhost", 6379);
     private static Map<String, Stack<Map<byte[], byte[]>>> cartUndoMap = new HashMap<>();
 
-    public static void addItemToCart(String cartId, String clienteId, String itemId, int quantity) {
+    public static void addItemToCart(String clienteId) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el ID del carrito: ");
+        String cartId = scanner.nextLine();
+
+        System.out.print("Ingrese el ID del artículo: ");
+        String itemId = scanner.nextLine();
+
+        System.out.print("Ingrese la cantidad: ");
+        int cantidad = scanner.nextInt();
         try (Jedis jedis = pool.getResource()) {
             // Verificar si el artículo existe en el catálogo
             boolean itemExists = Connection.checkIfItemExists(itemId);
             if (itemExists) {
                 saveState(cartId, jedis.hgetAll(cartId.getBytes()));
-                jedis.hset(cartId.getBytes(), itemId.getBytes(), String.valueOf(quantity).getBytes());
+                jedis.hset(cartId.getBytes(), itemId.getBytes(), String.valueOf(cantidad).getBytes());
                 jedis.hset(cartId.getBytes(), "clienteId".getBytes(), clienteId.getBytes());
+                System.out.println("Agregado correctamente.");
             } else {
                 System.out.println("El artículo no existe en el catálogo.");
             }
         }
     }
-
-
-    public static void printCartItems(String idUser) {
+    public static void printCartItemsv2() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese el ID del carrito: ");
         String cartIdBuscar = scanner.nextLine();
+
+        try (Jedis jedis = pool.getResource()) {
+            Map<byte[], byte[]> cartItems = jedis.hgetAll(cartIdBuscar.getBytes());
+
+            if (cartItems.isEmpty()) {
+                System.out.println("El carrito de compra con ID " + cartIdBuscar + " no se encontró.");
+                return;
+            }
+
+            for (Map.Entry<byte[], byte[]> entry : cartItems.entrySet()) {
+                String itemId = new String(entry.getKey());
+                if (!"clienteId".equals(itemId)) {
+                    int cantidad = Integer.parseInt(new String(entry.getValue()));
+                    System.out.println("Item: " + itemId + ", Cantidad: " + cantidad);
+                }
+            }
+        }
+    }
+
+
+
+    public static void printCartItems(String cartIdBuscar) {
+
         try (Jedis jedis = pool.getResource()) {
             Map<byte[], byte[]> cartItems = jedis.hgetAll(cartIdBuscar.getBytes());
             for (Map.Entry<byte[], byte[]> entry : cartItems.entrySet()) {
@@ -51,7 +82,10 @@ public class connectionJedis {
         }
     }
 
-    public static void undo(String cartId) {
+    public static void undo( ) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el ID del carrito para volver un paso atras: ");
+        String cartId = scanner.nextLine();
         Stack<Map<byte[], byte[]>> undoStack = cartUndoMap.get(cartId);
         if (undoStack != null && !undoStack.isEmpty()) {
             Map<byte[], byte[]> previousState = undoStack.pop();
@@ -73,17 +107,27 @@ public class connectionJedis {
         undoStack.push(new HashMap<>(currentState));
     }
 
-    public static void removeItemCart(String cartId, String itemId) {
+    public static void removeItemCart() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el ID del carrito para Eliminar un item: ");
+        String cartId = scanner.nextLine();
+
+        System.out.print("Ingrese el ID del item para eliminar: ");
+        String itemId = scanner.nextLine();
         try (Jedis jedis = pool.getResource()) {
             saveState(cartId, jedis.hgetAll(cartId.getBytes()));
             jedis.hdel(cartId.getBytes(), itemId.getBytes());
         }
+        connectionJedis.printCartItems(cartId);
     }
 
-    public static void deleteCart(String cartId) {
+    public static void deleteCart() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el ID del carrito para Eliminar : ");
+        String cartIdDelete = scanner.nextLine();
         try (Jedis jedis = pool.getResource()) {
-            saveState(cartId, jedis.hgetAll(cartId.getBytes()));
-            jedis.del(cartId.getBytes());
+            saveState(cartIdDelete, jedis.hgetAll(cartIdDelete.getBytes()));
+            jedis.del(cartIdDelete.getBytes());
         }
     }
     public static String getClienteIdFromCart(String cartId) {
@@ -111,4 +155,5 @@ public class connectionJedis {
             return productos;
         }
     }
+
 }

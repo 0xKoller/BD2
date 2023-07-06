@@ -1,6 +1,8 @@
 package demo;
 
 import com.mongodb.quickstart.Connection;
+
+import java.time.Duration;
 import java.util.List;
 import org.jedis.connectionJedis;
 import java.util.Scanner;
@@ -37,6 +39,7 @@ public class main {
                  System.out.println("6.- Facturar carrito");
                  System.out.println("7.- Ver prodcutos");
                  System.out.println("8.- Pagar factura");
+                 System.out.println("9.- Volver atras en el carrito");
                  System.out.println("0.- SALIR");
                  System.out.print("Ingrese una opcion: ");
                  opt = scanner.nextInt();
@@ -44,19 +47,13 @@ public class main {
                  switch (opt) {
                      case 1:
 //                       El usuario seleccione el carrito para ver los elementos
-                         connectionJedis.printCartItems(idUser);
+
+
+                         connectionJedis.printCartItemsv2();
                          break;
                      case 2:
-                        System.out.print("Ingrese el ID del carrito: ");
-                        String cartId = scanner.nextLine();
 
-                        scanner.nextLine();
-                        System.out.print("Ingrese el ID del artículo: ");
-                        String itemId = scanner.nextLine();
-
-                        System.out.print("Ingrese la cantidad: ");
-                        int cantidad = scanner.nextInt();
-                        connectionJedis.addItemToCart(cartId,idUser, itemId, cantidad);
+                        connectionJedis.addItemToCart(idUser);
                         break;
                      case 3:
                         System.out.print("Ingrese el ID del carrito para actualizar: ");
@@ -70,21 +67,13 @@ public class main {
                         connectionJedis.updateCartItemQuantity(cartIdUpdate,itemIdUpdate,cantidadNueva);
                         break;
                      case 4:
-                         System.out.print("Ingrese el ID del carrito para Eliminar un item: ");
-                         String cartIdDel = scanner.nextLine();
-
-                         System.out.print("Ingrese el ID del carrito para Eliminar: ");
-                         String itemIdDel = scanner.nextLine();
-
-                         connectionJedis.removeItemCart(cartIdDel,itemIdDel);
+                         connectionJedis.removeItemCart();
                          System.out.print("El item fue borrado con exito ");
-                         connectionJedis.printCartItems(idUser);
+
                          break;
                      case 5:
-                         System.out.print("Ingrese el ID del carrito para Eliminar un item: ");
-                         String cartIdDelete = scanner.nextLine();
 
-                         connectionJedis.deleteCart(cartIdDelete);
+                         connectionJedis.deleteCart();
                          System.out.print("Carrito borrado con exito ");
                          break;
                      case 6:
@@ -93,8 +82,16 @@ public class main {
                      case 7:
                          Connection.verProductos();
                          break;
+                     case 8:
+                         break;
+                     case 9:
+                         connectionJedis.undo();
+                         break;
                      case 0:
-                         UserSession.logoutUser();
+                         int duracion = UserSession.logoutUser();
+                         if (duracion != 0){
+                             Connection.addToClientDuracion(idUser,duracion);
+                         }
                          break;
                  }
 
