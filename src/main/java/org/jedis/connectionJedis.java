@@ -58,6 +58,26 @@ public class connectionJedis {
         }
     }
 
+    public static boolean existsCart(String cartIdBuscar) {
+
+        try (Jedis jedis = pool.getResource()) {
+            Map<byte[], byte[]> cartItems = jedis.hgetAll(cartIdBuscar.getBytes());
+
+            if (cartItems.isEmpty()) {
+
+                return false;
+            }
+
+            for (Map.Entry<byte[], byte[]> entry : cartItems.entrySet()) {
+                String itemId = new String(entry.getKey());
+                if (!"clienteId".equals(itemId)) {
+                    int cantidad = Integer.parseInt(new String(entry.getValue()));
+                }
+            }
+            return true;
+        }
+    }
+
 
 
     public static void printCartItems(String cartIdBuscar) {
@@ -121,6 +141,8 @@ public class connectionJedis {
         connectionJedis.printCartItems(cartId);
     }
 
+
+
     public static void deleteCart() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese el ID del carrito para Eliminar : ");
@@ -130,6 +152,14 @@ public class connectionJedis {
             jedis.del(cartIdDelete.getBytes());
         }
     }
+
+    public static void payedCart(String cartIdDelete) {
+        try (Jedis jedis = pool.getResource()) {
+            saveState(cartIdDelete, jedis.hgetAll(cartIdDelete.getBytes()));
+            jedis.del(cartIdDelete.getBytes());
+        }
+    }
+
     public static String getClienteIdFromCart(String cartId) {
         try (Jedis jedis = pool.getResource()) {
             byte[] clienteIdBytes = jedis.hget(cartId.getBytes(), "clienteId".getBytes());

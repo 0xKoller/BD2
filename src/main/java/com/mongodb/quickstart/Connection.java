@@ -318,14 +318,19 @@ public class Connection {
         mongoClient.close();
     }
 
-    public static String facturarCarrito(Carrito carrito) {
-        String id = Carrito.getId();
+    public static String facturarCarrito() {
+
         Scanner scanner = new Scanner(System.in);
         JedisPool pool = new JedisPool("localhost", 6379);
         String id_cc = "";
+        System.out.println("Ingrese el ID del carrito que desea pagar: ");
+        String id = scanner.nextLine();
         boolean validarStock = true;
         int metodo_pago = -1;
         boolean state = false;
+        boolean exists = true;
+        exists = connectionJedis.existsCart(id);
+        if(exists){
         try (Jedis jedis = pool.getResource()) {
             Map<byte[], byte[]> cartItems = jedis.hgetAll(id.getBytes());
             for (Map.Entry<byte[], byte[]> entry : cartItems.entrySet()) {
@@ -356,19 +361,17 @@ public class Connection {
                 }
                 break;
             }
-            if (!state) {
+            if (state) {
+                connectionJedis.payedCart(id);
                 if (validarStock == true) {
                     String id_del_usuario = connectionJedis.getClienteIdFromCart(id);
-
                     factura.setId_user(id_del_usuario);
                     factura.setProductos(connectionJedis.extractCartProducts(id));
                     if (metodo_pago != 3) {
                         MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
                         MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
                         MongoCollection<Document> collection = database.getCollection("usuarios");
-                        Document document = new Document("id", factura.getId())
-                                .append("productos", factura.getProductos())
-                                .append("importe", factura.getImporte());
+                        Document document = new Document("facturas", factura.toDocument());
                         collection.insertOne(document);
                         return "Factura pagada.";
                     } else {
@@ -382,6 +385,9 @@ public class Connection {
             } else {
                 return "No hay saldo en la cuenta corriente.";
             }
+        }
+        }else{
+            return "No existe ese carrito.";
         }
     }
 
@@ -511,6 +517,40 @@ public class Connection {
         double newValue = oldValue + monto;
         cursor.close();
 
+    }
+
+    public static void pagarFactura(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingrese la CC a pagar: ");
+        String cc = scanner.nextLine();
+        List<String> ccExistentes = new ArrayList<>();
+        MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = database.getCollection("cc");
+        MongoCursor<Document> cursor = collection.find().iterator();
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
+            String id = document.getString("id");
+            ccExistentes.add(id);
+        }
+        if(ccExistentes.contains(cc)){
+
+            Document document = collection.find().first();
+
+            List<String> arrayField = (List<String>) document.get("fact");
+
+            // Recorrer e imprimir los elementos del array
+            for (String element : arrayField) {
+                System.out.println("Factura ID: "+element);
+            }
+            System.out.println("Seleccione una factura a pagar: ");
+            String factSelecc = scanner.nextLine();
+            MongoCollection<Document> collectionUsers = database.getCollection("usuarios");
+
+            // Realizar la búsqueda por código dentro del campo de array
+            Document query = new Document("arrayField", new Document("$elemMatch", new Document("codigo", factSelecc)));
+            Document documentUsers = collectionUsers.find(query).first();
+        }
     }
 }
 

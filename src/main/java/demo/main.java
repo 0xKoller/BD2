@@ -77,12 +77,15 @@ public class main {
                          System.out.print("Carrito borrado con exito ");
                          break;
                      case 6:
-
+                         String message = "";
+                         message = Connection.facturarCarrito();
+                         System.out.println(message);
                          break;
                      case 7:
                          Connection.verProductos();
                          break;
                      case 8:
+                         Connection.pagarFactura();
                          break;
                      case 9:
                          connectionJedis.undo();

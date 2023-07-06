@@ -42,8 +42,6 @@ public class Factura {
         String caracteres = "0123456789";
         int longitud = 10;
         String nuevoId = "";
-        boolean idRepetido = true;
-        while (idRepetido) {
             StringBuilder sb = new StringBuilder(longitud);
             for (int i = 0; i < longitud; i++) {
                 int indice = random.nextInt(caracteres.length());
@@ -51,7 +49,7 @@ public class Factura {
                 sb.append(caracter);
             }
             nuevoId = sb.toString();
-        }
+
         return nuevoId;
     }
 
@@ -81,7 +79,7 @@ public class Factura {
         this.productos = productos;
         float resultado = 0;
         for (Object value : productos.values()) {
-            float floatValue = Float.parseFloat((String) value);
+            int floatValue = (int) value;
             resultado += floatValue;
         }
         setImporte(resultado);
@@ -107,4 +105,14 @@ public class Factura {
         return fecha;
     }
 
+    public Document toDocument() {
+        Document document = new Document();
+        document.append("id_user", id_user)
+                .append("importe", importe)
+                .append("productos", productos)
+                .append("metodo", metodo)
+                .append("id_emple", id_emple)
+                .append("fecha", fecha);
+        return document;
+    }
 }
