@@ -1,6 +1,7 @@
 package com.mongodb.quickstart;
 
 
+
 import cassandraConnector.PercistenciaLog;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
@@ -132,7 +133,8 @@ public class Connection {
                     System.out.println("El valor del precio ingresado no es válido. Se omitirá la actualización del precio.");
                 }
             }
-            /*FindIterable<Document> documents = collection.find(filter);
+
+            FindIterable<Document> documents = collection.find(filter);
             MongoCursor<Document> cursor = documents.iterator();
 
             // Verificar si se encontró el producto
@@ -141,9 +143,26 @@ public class Connection {
                 String nombre = document.getString("name");
                 String descripcion = document.getString("desc");
                 String precio = document.getString("price");
-                PercistenciaLog.insertLog(code,nombre,nuevoNombre,descripcion,nuevaDescripcion,precio,nuevoPrecio);
+                int stock = document.getInteger("stock");
 
-            }*/
+                String ipAddress = "127.0.0.1";
+                int port = 9042;
+                PercistenciaLog insert = new PercistenciaLog(ipAddress,port);
+
+                String newStock = Integer.toString(stock);
+                int newCode = Integer.parseInt(code);
+                double newPrecio = Integer.parseInt(precio);
+                double newNuevoPrecio;
+                if(!precioString.isEmpty()){
+                     newNuevoPrecio = Integer.parseInt(precioString);
+                }else{
+                     newNuevoPrecio = 0;
+                }
+
+                PercistenciaLog.insertLog(newCode, descripcion,nombre,newPrecio,newStock, nuevaDescripcion,
+                        nuevoNombre,newNuevoPrecio,null);
+                insert.close();
+            }
 
 
             // Crear el documento con las actualizaciones

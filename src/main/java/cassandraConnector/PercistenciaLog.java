@@ -15,22 +15,26 @@ import static java.lang.System.out;
 public class PercistenciaLog {
 
     private  Cluster cluster;
-    private Session session;
+    private static Session session;
 
     public PercistenciaLog(String node, int port) {
         cluster = Cluster.builder().addContactPoint(node).withPort(port).build();
         session = cluster.connect();
     }
 
-    public void insertLog(int idProd, String campo, String antes, String despues, int idAdmin) {
-        String query = "INSERT INTO tpo.log_catalogo (id,id_producto,campo_modificado,antes,despues,id_admin) " +
-                "VALUES (uuid()"+","+ idProd +", '" + campo +"','" + antes + "','" + despues + "'," + idAdmin + ");";
+   public static void insertLog(int idProd, String antesDesc, String antesNom, double antesPrecio, String antesStock,
+                             String despuesDesc, String despuesNom, double despuesPrecio, String despuesStock) {
+    String query = "INSERT INTO tpo.log_catalogo (id, id_producto, antes_desc, antes_nomb, antes_precio, antes_stock, " +
+            "despues_desc, despues_nomb, despues_precio, despues_stock) " +
+            "VALUES (uuid(), " + idProd + ", '" + antesDesc + "', '" + antesNom + "', " + antesPrecio + ", '" + antesStock + "', " +
+            "'" + despuesDesc + "', '" + despuesNom + "', " + despuesPrecio + ", '" + despuesStock + "');";
 
-        session.execute(query);
-        System.out.println("-------------------------");
-        System.out.println("log successfully updated!");
-        System.out.println("-------------------------");
-    }
+    session.execute(query);
+    System.out.println("-------------------------");
+    System.out.println("log successfully updated!");
+    System.out.println("-------------------------");
+}
+
 
     public void selectAllLog(){
         String keyspace = "tpo;";
@@ -43,15 +47,21 @@ public class PercistenciaLog {
         for (Row row : resultSet) {
             // Obtener los valores de cada columna
             int columna1 = row.getInt("id_producto");
-            String columna2 = row.getString("campo_modificado");
-            String columna3 = row.getString("antes");
-            String columna4 = row.getString("despues");
-            int columna5 = row.getInt("id_admin");
+            String columna2 = row.getString("antes_desc");
+            String columna3 = row.getString("antes_nomb");
+            double columna4 = row.getDouble("antes_precio");
+            String columna5 = row.getString("antes_stock");
+            String columna6 = row.getString("despues_desc");
+            String columna7 = row.getString("despues_nomb");
+            double columna8 = row.getDouble("despues_precio");
+            String columna9 = row.getString("despues_stock");
 
 
             // Mostrar los valores en la consola
-            System.out.println("idProducto: " + columna1 + " -- campo modificado: " + columna2 + " -- antes: " + columna3 +
-                    " -- despues: " + columna4 + " -- idAdmin: " + columna5);
+            System.out.println("idProducto: " + columna1 + " -- antesDesc: " + columna2 + " -- antesNomb: " + columna3 +
+                    " -- antesPrecio: " + columna4 + " -- antesStock: " + columna5 + " -- despuesDesc: "
+            + columna6 + " -- despuesNomb: " + columna7 + " -- despuesPrecio: " + columna8 + " -- despuesStock: "
+            + columna9);
         }
     }
 
@@ -125,10 +135,11 @@ public class PercistenciaLog {
             decision = sc.nextInt();
         }
 
-        /* descomentar cuando se quiere hacer un insert. Ver como implementar
+        // descomentar cuando se quiere hacer un insert. Ver como implementar
         PercistenciaLog insert = new PercistenciaLog(ipAddress, port);
-        insert.insertLog(10, "precio", "20", "15", 1147157);
-        insert.close();*/
+        insert.insertLog(15, "juan", "cafe", 10.0,"10"
+        , "algo","cafe", 11.2, null);
+        insert.close();
 
         if(decision == 1){
             PercistenciaLog selectAll = new PercistenciaLog(ipAddress,port);
