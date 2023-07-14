@@ -409,48 +409,48 @@
       <DasType>Int32|4s</DasType>
       <Position>1</Position>
     </column>
-    <column id="116" parent="18" name="_id">
-      <DasType>ObjectId|12s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="117" parent="18" name="address">
+    <column id="116" parent="18" name="id_user">
       <DasType>String|12s</DasType>
       <Position>1</Position>
     </column>
-    <column id="118" parent="18" name="corriente">
-      <DasType>String|12s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="119" parent="18" name="doc">
-      <DasType>String|12s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="120" parent="18" name="id">
-      <DasType>String|12s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="121" parent="18" name="name">
-      <DasType>String|12s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="122" parent="18" name="id_user">
-      <DasType>String|12s</DasType>
-      <Position>1</Position>
-    </column>
-    <column id="123" parent="18" name="productos">
+    <column id="117" parent="18" name="productos">
       <DasType>Object|4999544s</DasType>
       <Position>1</Position>
     </column>
-    <column id="124" parent="18" name="cat">
-      <DasType>String|12s</DasType>
-      <Position>2</Position>
+    <column id="118" parent="18" name="_id">
+      <DasType>ObjectId|12s</DasType>
+      <Position>1</Position>
     </column>
-    <column id="125" parent="18" name="importe">
+    <column id="119" parent="18" name="address">
+      <DasType>String|12s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="120" parent="18" name="corriente">
+      <DasType>String|12s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="121" parent="18" name="doc">
+      <DasType>String|12s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="122" parent="18" name="id">
+      <DasType>String|12s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="123" parent="18" name="name">
+      <DasType>String|12s</DasType>
+      <Position>1</Position>
+    </column>
+    <column id="124" parent="18" name="importe">
       <DasType>Double|8s</DasType>
       <Position>2</Position>
     </column>
-    <column id="126" parent="18" name="productos.1">
+    <column id="125" parent="18" name="productos.1">
       <DasType>Int32|4s</DasType>
+      <Position>2</Position>
+    </column>
+    <column id="126" parent="18" name="cat">
+      <DasType>String|12s</DasType>
       <Position>2</Position>
     </column>
     <column id="127" parent="18" name="productos.2">

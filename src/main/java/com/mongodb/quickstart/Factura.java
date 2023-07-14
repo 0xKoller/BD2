@@ -1,6 +1,7 @@
 package com.mongodb.quickstart;
 
 import com.mongodb.client.*;
+import it.unimi.dsi.fastutil.Hash;
 import org.bson.Document;
 
 import java.util.*;
@@ -11,19 +12,21 @@ public class Factura {
 
     private static  String id_user;
     private  static double importe;
-    private static  HashMap<String, Object> productos;
+    private static  Document productos;
     private  static boolean metodo;
     private  static String id_emple;
     private static  Date fecha;
 
     private boolean estado;
 
+
+
     public Factura() {
         this.id = generarId();
         this.fecha = new Date();
     }
 
-    public Factura(String id_user, double importe, HashMap<String, Object> productos, boolean metodo, String id_emple) {
+    public Factura(String id_user, double importe, Document productos, boolean metodo, String id_emple) {
         this.id_user = id_user;
         this.importe = importe;
         this.productos = productos;
@@ -70,19 +73,27 @@ public class Factura {
     }
 
 
-    public Document getProductos(){
-        Document mapProductos = new Document(this.productos);
-        return mapProductos;
+    public HashMap<String, Object> getProductos(){
+        HashMap<String, Object> map = new HashMap<String, Object>(this.productos);
+        return map;
     }
 
+
+
     public void setProductos(HashMap<String, Object> productos) {
-        this.productos = productos;
         float resultado = 0;
         for (Object value : productos.values()) {
             int floatValue = (int) value;
             resultado += floatValue;
         }
         setImporte(resultado);
+        Document doc = new Document(productos);
+        this.productos = doc;
+    }
+
+    public Document getProductosForFactura(){
+        Document productos = new Document(this.productos);
+        return productos;
     }
 
     public static  boolean getMetodo() {

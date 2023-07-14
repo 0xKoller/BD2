@@ -58,6 +58,19 @@ public class connectionJedis {
         }
     }
 
+    public static HashMap<String, Object> extractCartProducts(String cartId) {
+        try (Jedis jedis = pool.getResource()) {
+            Map<String, String> cartData = jedis.hgetAll(cartId);
+            HashMap<String, Object> productos = new HashMap<>();
+            for (Map.Entry<String, String> entry : cartData.entrySet()) {
+                String itemId = entry.getKey();
+                int quantity = Integer.parseInt(entry.getValue());
+                productos.put(itemId, quantity);
+            }
+            return productos;
+        }
+    }
+
     public static boolean existsCart(String cartIdBuscar) {
 
         try (Jedis jedis = pool.getResource()) {
@@ -170,20 +183,6 @@ public class connectionJedis {
             }
         }
     }
-    public static HashMap<String, Object> extractCartProducts(String cartId) {
-        try (Jedis jedis = pool.getResource()) {
-            Map<String, String> cartData = jedis.hgetAll(cartId);
 
-            HashMap<String, Object> productos = new HashMap<>();
-            for (Map.Entry<String, String> entry : cartData.entrySet()) {
-                String itemId = entry.getKey();
-                int quantity = Integer.parseInt(entry.getValue());
-
-                productos.put(itemId, quantity);
-            }
-
-            return productos;
-        }
-    }
 
 }
