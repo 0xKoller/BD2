@@ -118,12 +118,12 @@ public class Factura {
 
     public Document toDocument() {
         Document document = new Document();
-        document.append("id_user", id_user)
-                .append("importe", importe)
-                .append("productos", productos)
-                .append("metodo", metodo)
-                .append("id_emple", id_emple)
-                .append("fecha", fecha);
+        document.append("id_user", this.id_user)
+                .append("importe", this.importe)
+                .append("productos", this.productos)
+                .append("metodo", this.metodo)
+                .append("id_emple", this.id_emple)
+                .append("fecha", this.fecha);
         return document;
     }
 }

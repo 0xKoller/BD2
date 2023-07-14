@@ -580,14 +580,30 @@ public class Connection {
         MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
         MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
         MongoCollection<Document> collection = database.getCollection("usuarios");
-        Document userDoc = collection.find(new Document("id_user", idUser)).first();
-        List<Document> userDocuments = (List<Document>) userDoc.get("facturas");
+        Document query = new Document("id", idUser);
+        Document userDoc = collection.find(query).first();
+
+        if (userDoc == null) {
+            System.out.println("El usuario con id " + idUser + " no existe.");
+            return;
+        }
+        Object facturasObj = userDoc.get("facturas");
+        if (facturasObj == null) {
+            System.out.println("El usuario con id " + idUser + " no tiene facturas.");
+            return;
+        }
+        if (!(facturasObj instanceof List<?>)) {
+            System.out.println("El campo facturas del usuario no es una lista.");
+            return;
+        }
+        List<Document> userDocuments = (List<Document>) facturasObj;
         int i = 1;
         for (Document doc : userDocuments) {
             System.out.println("Factura" + i);
             for (String key : doc.keySet()) {
                 System.out.println(key+" " + doc.get(key).toString());
             }
+            i++;
         }
     }
 }
