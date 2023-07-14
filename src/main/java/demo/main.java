@@ -1,5 +1,6 @@
 package demo;
 
+import cassandraConnector.PercistenciaLog;
 import com.mongodb.quickstart.Connection;
 
 import java.time.Duration;
@@ -105,6 +106,7 @@ public class main {
                  System.out.println("2.- Modificar producto");
                  System.out.println("3.- Crear usuario");
                  System.out.println("4.- Agregar producto al catalogo");
+                 System.out.println("5.- Ver log de cambios al catalogo");
                  System.out.println("0.- SALIR");
                  System.out.print("Ingrese una opcion: ");
                  opt = scanner.nextInt();
@@ -121,6 +123,9 @@ public class main {
                      case 4:
                          Connection.agregarProducto();
                          break;
+                     case 5:
+                        PercistenciaLog.selectAllLog();
+                        break;
                      case 0:
                          break;
                  }
