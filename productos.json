@@ -2,7 +2,7 @@
   {
     "name": "Camisa de algodón",
     "code": "2345",
-    "desc": 30,
+    "desc": "Prenda de algodón de alta calidad",
     "fotos": "",
     "price": 29.99,
     "stock": 98
@@ -10,7 +10,7 @@
   {
     "name": "Zapatos deportivos",
     "code": "1876",
-    "desc": 15,
+    "desc": "Calzado deportivo cómodo y moderno",
     "fotos": "",
     "price": 79.99,
     "stock": 112
@@ -18,7 +18,7 @@
   {
     "name": "Bolso de cuero",
     "code": "5912",
-    "desc": 20,
+    "desc": "Bolso elegante y duradero de cuero genuino",
     "fotos": "",
     "price": 149.99,
     "stock": 72
@@ -26,7 +26,7 @@
   {
     "name": "Pantalones vaqueros",
     "code": "8320",
-    "desc": 5,
+    "desc": "Vaqueros clásicos y cómodos para el día a día",
     "fotos": "",
     "price": 49.99,
     "stock": 124
@@ -34,7 +34,7 @@
   {
     "name": "Reloj de pulsera",
     "code": "4123",
-    "desc": 40,
+    "desc": "Reloj elegante y funcional para cualquier ocasión",
     "fotos": "",
     "price": 99.99,
     "stock": 89
@@ -42,7 +42,7 @@
   {
     "name": "Suéter de lana",
     "code": "5678",
-    "desc": 10,
+    "desc": "Suéter cálido y suave hecho de lana de calidad",
     "fotos": "",
     "price": 59.99,
     "stock": 60
@@ -50,7 +50,7 @@
   {
     "name": "Gafas de sol",
     "code": "9012",
-    "desc": 25,
+    "desc": "Gafas de sol con protección UV y estilo moderno",
     "fotos": "",
     "price": 39.99,
     "stock": 77
@@ -58,7 +58,7 @@
   {
     "name": "Vestido elegante",
     "code": "3456",
-    "desc": 50,
+    "desc": "Vestido elegante y sofisticado para eventos especiales",
     "fotos": "",
     "price": 129.99,
     "stock": 51
@@ -66,7 +66,7 @@
   {
     "name": "Bolígrafo de lujo",
     "code": "7890",
-    "desc": 5,
+    "desc": "Bolígrafo de lujo con diseño exclusivo",
     "fotos": "",
     "price": 19.99,
     "stock": 95
@@ -74,7 +74,7 @@
   {
     "name": "Zapatos de tacón",
     "code": "4321",
-    "desc": 15,
+    "desc": "Zapatos de tacón elegantes para ocasiones formales",
     "fotos": "",
     "price": 89.99,
     "stock": 135
