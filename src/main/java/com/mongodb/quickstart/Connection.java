@@ -142,7 +142,7 @@ public class Connection {
                 Document document = cursor.next();
                 String nombre = document.getString("name");
                 String descripcion = document.getString("desc");
-                String precio = document.getString("price");
+                double precio = document.getDouble("price");
                 int stock = document.getInteger("stock");
 
                 String ipAddress = "127.0.0.1";
@@ -151,10 +151,10 @@ public class Connection {
 
                 String newStock = Integer.toString(stock);
                 int newCode = Integer.parseInt(code);
-                double newPrecio = Integer.parseInt(precio);
+                double newPrecio = precio;
                 double newNuevoPrecio;
                 if(!precioString.isEmpty()){
-                     newNuevoPrecio = Integer.parseInt(precioString);
+                     newNuevoPrecio = Double.parseDouble(precioString);
                 }else{
                      newNuevoPrecio = 0;
                 }
