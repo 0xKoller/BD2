@@ -40,28 +40,23 @@ public class main {
                  System.out.println("7.- Ver prodcutos");
                  System.out.println("8.- Pagar factura");
                  System.out.println("9.- Volver atras en el carrito");
+                 System.out.println("10.- Ver facturas");
                  System.out.println("0.- SALIR");
                  System.out.print("Ingrese una opcion: ");
                  opt = scanner.nextInt();
 
                  switch (opt) {
                      case 1:
-//                       El usuario seleccione el carrito para ver los elementos
-
-
                          connectionJedis.printCartItemsv2();
                          break;
                      case 2:
-
                         connectionJedis.addItemToCart(idUser);
                         break;
                      case 3:
                         System.out.print("Ingrese el ID del carrito para actualizar: ");
                         String cartIdUpdate = scanner.nextLine();
-
                         System.out.print("Ingrese el ID del item para actualizar: ");
                         String itemIdUpdate = scanner.nextLine();
-
                         System.out.print("Ingrese la nueva cantidad: ");
                         int cantidadNueva = scanner.nextInt();
                         connectionJedis.updateCartItemQuantity(cartIdUpdate,itemIdUpdate,cantidadNueva);
@@ -90,6 +85,9 @@ public class main {
                      case 9:
                          connectionJedis.undo();
                          break;
+                     case 10:
+                         Connection.verFacturas(idUser);
+                         break;
                      case 0:
                          int duracion = UserSession.logoutUser();
                          if (duracion != 0){
@@ -105,6 +103,7 @@ public class main {
                  System.out.println("2.- Modificar producto");
                  System.out.println("3.- Crear usuario");
                  System.out.println("4.- Agregar producto al catalogo");
+                 System.out.println("5.- Ver las facturas");
                  System.out.println("0.- SALIR");
                  System.out.print("Ingrese una opcion: ");
                  opt = scanner.nextInt();
@@ -121,6 +120,9 @@ public class main {
                      case 4:
                          Connection.agregarProducto();
                          break;
+                     case 5:
+                         List<String> username = Connection.seleccionUsuario();
+                         Connection.verFacturas(username.get(0));
                      case 0:
                          break;
                  }

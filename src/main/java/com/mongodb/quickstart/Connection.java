@@ -576,5 +576,19 @@ public class Connection {
             collection.updateOne(filter,update);
         }
     }
+    public static void verFacturas(String idUser){
+        MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = database.getCollection("usuarios");
+        Document userDoc = collection.find(new Document("id_user", idUser)).first();
+        List<Document> userDocuments = (List<Document>) userDoc.get("facturas");
+        int i = 1;
+        for (Document doc : userDocuments) {
+            System.out.println("Factura" + i);
+            for (String key : doc.keySet()) {
+                System.out.println(key+" " + doc.get(key).toString());
+            }
+        }
+    }
 }
 
