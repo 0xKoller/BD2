@@ -22,16 +22,19 @@ public class Factura {
 
 
     public Factura() {
+        this.id_user = "";
+        this.importe = 0.0;
+        this.productos = Document.parse("");
+        this.metodo = true;
+        this.id_emple = "";
         this.id = generarId();
         this.fecha = new Date();
     }
 
-    public Factura(String id_user, double importe, Document productos, boolean metodo, String id_emple) {
+    public Factura(String id_user,  Document productos, boolean metodo) {
         this.id_user = id_user;
-        this.importe = importe;
         this.productos = productos;
         this.metodo = metodo;
-        this.id_emple = id_emple;
         this.id = generarId();
         this.fecha = new Date();
     }

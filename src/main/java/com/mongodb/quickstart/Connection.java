@@ -360,17 +360,15 @@ public class Connection {
                     break;
                 }
             }
-            Factura factura = new Factura();
+
             while (true) {
                 System.out.println("Pagar con (1) Tarjeta, (2)Efectivo o (3)Cuenta Corriente: ");
                 metodo_pago = scanner.nextInt();
                 switch (metodo_pago) {
                     case 1:
-                        factura.setMetodo(true);
                         state = true;
                         break;
                     case 2:
-                        factura.setMetodo(true);
                         state = true;
                         break;
                     case 3:
@@ -384,17 +382,17 @@ public class Connection {
                 connectionJedis.payedCart(id);
                 if (validarStock == true) {
                     String id_del_usuario = connectionJedis.getClienteIdFromCart(id);
-                    factura.setId_user(id_del_usuario);
-                    factura.setProductos(connectionJedis.extractCartProducts(id));
                     if (metodo_pago != 3) {
+                        Factura factura = new Factura(id_del_usuario, new Document(connectionJedis.extractCartProducts(id)),state);
                         MongoClient mongoClient = MongoClients.create(CONNECTION_STRING);
                         MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
                         MongoCollection<Document> collection = database.getCollection("usuarios");
                         Document document = new Document("facturas", factura.toDocument());
                         collection.insertOne(document);
+
                         return "Factura pagada.";
                     } else {
-                        factura.setMetodo(false);
+                        Factura factura = new Factura(id_del_usuario, new Document(connectionJedis.extractCartProducts(id)),false);
                         agregarCC(factura.getId(),factura.getImporte(), id_cc);
                         return "Factura agregada en cc.";
                     }
