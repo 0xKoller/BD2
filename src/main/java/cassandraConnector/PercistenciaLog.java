@@ -58,10 +58,12 @@ public class PercistenciaLog {
 
 
             // Mostrar los valores en la consola
+            System.out.println("-------------------------------------------------------------------------------------");
             System.out.println("idProducto: " + columna1 + " -- antesDesc: " + columna2 + " -- antesNomb: " + columna3 +
                     " -- antesPrecio: " + columna4 + " -- antesStock: " + columna5 + " -- despuesDesc: "
             + columna6 + " -- despuesNomb: " + columna7 + " -- despuesPrecio: " + columna8 + " -- despuesStock: "
             + columna9);
+            System.out.println("-------------------------------------------------------------------------------------");
         }
     }
 

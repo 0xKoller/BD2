@@ -6,6 +6,8 @@ import com.mongodb.quickstart.Connection;
 import java.time.Duration;
 import java.util.List;
 import org.jedis.connectionJedis;
+
+import javax.persistence.PersistenceContext;
 import java.util.Scanner;
 
 
@@ -123,7 +125,9 @@ public class main {
                          Connection.agregarProducto();
                          break;
                      case 5:
-                        PercistenciaLog.selectAllLog();
+                         PercistenciaLog mostrar = new PercistenciaLog("127.0.0.1",9042);
+                         PercistenciaLog.selectAllLog();
+                         mostrar.close();
                         break;
                      case 6:
                          List<String> username = Connection.seleccionUsuario();
